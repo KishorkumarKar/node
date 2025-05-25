@@ -2,6 +2,8 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
+const { createToken, compareToken } = require("../utils/bcrypt");
+const { constants } = require("../constants");
 
 //@desc Register a user
 //@route POST /api/users/register
@@ -18,23 +20,27 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already registered!");
   }
 
-  //Hash password
-  const hashedPassword = await bcrypt.hash(password, 10);
-  console.log("Hashed Password: ", hashedPassword);
-  const user = await User.create({
-    username,
-    email,
-    password: hashedPassword,
-  });
+  try {
+    //has code
+    const hashedPassword = await createToken(password);
+    console.log("Hashed Password: ", hashedPassword);
+    const user = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+    });
 
-  console.log(`User created ${user}`);
-  if (user) {
-    res.status(201).json({ _id: user.id, email: user.email });
-  } else {
-    res.status(400);
-    throw new Error("User data is not valid");
+    console.log(`User created ${user}`);
+    if (user) {
+      res.status(201).json({ _id: user.id, email: user.email });
+    } else {
+      res.status(400);
+      throw new Error("User data is not valid");
+    }
+  } catch (error) {
+    res.status(constants.BCRYPT_ERROR);
+    throw new Error(error.message);
   }
-  res.json({ message: "Register the user" });
 });
 
 //@desc Login user
@@ -48,8 +54,15 @@ const loginUser = asyncHandler(async (req, res) => {
   }
   const user = await User.findOne({ email });
   console.log(process.env.ACCESS_TOKEN_SECRET);
-  //compare password with hashedpassword
-  if (user && (await bcrypt.compare(password, user.password))) {
+  const isValidToken = await compareToken(password, user.password).catch(
+    (error) => {
+      res.status(constants.BCRYPT_ERROR);
+      console.log(error.message);
+      throw new Error(error.message);
+    }
+  );
+
+  if (user && isValidToken) {
     const accessToken = jwt.sign(
       {
         user: {
@@ -63,7 +76,8 @@ const loginUser = asyncHandler(async (req, res) => {
     );
     res.status(200).json({ accessToken });
   } else {
-    res.status(401);
+    console.log("process.env.ACCESS_TOKEN_SECRET");
+    res.status(constants.UNAUTHORIZED);
     throw new Error("email or password is not valid");
   }
 });
