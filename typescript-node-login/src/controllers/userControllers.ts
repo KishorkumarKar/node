@@ -1,4 +1,4 @@
-import { IUser, UserRequestBody } from "../interfaces/user";
+import { IUser, UserRequestBody, UserLoginBody } from "../interfaces/user.interface";
 import { Response } from "express";
 const Joi = require("joi");
 const asyncHandler = require("express-async-handler");
@@ -27,4 +27,10 @@ const registerUser = asyncHandler(
   },
 );
 
-export { registerUser };
+const loginUser = asyncHandler(
+  async (req: UserLoginBody<IUser>, res: Response) => {
+    res.json(req.body);
+  },
+);
+
+export { registerUser, loginUser };
