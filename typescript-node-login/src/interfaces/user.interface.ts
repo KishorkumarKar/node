@@ -1,10 +1,21 @@
-import { Request, Response } from "express";
+import { Request } from "express";
+import mongoose, { Types } from "mongoose";
+
+export interface IAddress extends mongoose.Document {
+  street: string;
+  city: string;
+  zipcode: string;
+  country: string;
+  _id: mongoose.Types.ObjectId;
+}
+
 export interface IUser extends Document {
   email: string;
   password: string;
   name: string;
   confirm_password: string;
   age: number;
+  address: IAddress[];
 }
 
 export interface UserRequestBody<T> extends Request {
