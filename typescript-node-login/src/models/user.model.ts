@@ -1,10 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 import { IUser, IAddress } from "../interfaces/user.interface";
-import { defaults } from "joi";
 
 const userSchema = new mongoose.Schema<IUser>(
   {
-    name: {
+    first_name: {
+      type: String,
+      required: [true, "Please add the user name"],
+    },
+    last_name: {
       type: String,
       required: [true, "Please add the user name"],
     },

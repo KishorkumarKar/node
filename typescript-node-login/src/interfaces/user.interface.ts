@@ -12,7 +12,8 @@ export interface IAddress extends mongoose.Document {
 export interface IUser extends Document {
   email: string;
   password: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   confirm_password: string;
   age: number;
   address: IAddress[];
