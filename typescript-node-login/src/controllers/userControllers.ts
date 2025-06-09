@@ -52,8 +52,14 @@ const registerUser = asyncHandler(
 
 const loginUser = asyncHandler(
   async (req: UserLoginBody<IUser>, res: Response) => {
-    console.log(`User created....`);
-    res.json(req.body);
+    try {
+      const userData = req.body;
+      const user = await User.findOne({ email: userData.email });
+      res.json(user);
+    } catch (error: any) {
+      res.status(STATUS.BCRYPT_ERROR);
+      throw new Error(error.message);
+    }
   },
 );
 

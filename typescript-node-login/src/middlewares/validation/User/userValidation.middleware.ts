@@ -4,7 +4,7 @@ import userSchema from "./userSchema.middleware";
 const userLoginValidation: RequestHandler = (req, res, next) => {
   let userData = req.body;
   const { error } = userSchema.loginUser.validate(userData);
-  console.log(error);
+  console.log("error:-", error);
   if (error) {
     throw new Error(error.details[0].message);
   } else {
