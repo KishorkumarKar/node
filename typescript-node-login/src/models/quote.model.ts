@@ -5,7 +5,7 @@ import {
   IQuoteProductInterface,
 } from "../interfaces/quote.interface";
 
-const quote = new mongoose.Schema<IQuote>(
+const quoteSchema = new mongoose.Schema<IQuote>(
   {
     status: {
       type: String,
@@ -38,7 +38,7 @@ const quote = new mongoose.Schema<IQuote>(
     },
     product: [
       {
-        type: new mongoose.Schema<IQuoteProductInterface>({
+        type: new mongoose.Schema({
           _id: {
             type: mongoose.Schema.Types.ObjectId,
             auto: true,
@@ -113,5 +113,6 @@ const quote = new mongoose.Schema<IQuote>(
     timestamps: true,
   },
 );
+const Quote = mongoose.model<IQuote>("Quote", quoteSchema);
 
-export default quote;
+export default Quote;
