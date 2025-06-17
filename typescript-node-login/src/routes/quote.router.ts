@@ -6,10 +6,11 @@ import {
   getQuote,
   deleteProduct,
 } from "../controllers/quoteController";
+import { addProductValidation } from "../middlewares/validation/quote/quoteValidation.middleware";
 
 router.get("/emptyCart", generateEmptyQuote);
 router.get("/getCart", getQuote);
-router.post("/product", addProduct);
+router.post("/product", addProductValidation, addProduct);
 router.delete("/product/:id", deleteProduct);
 router.post("/billingAddress", (req, res) => {
   res.json("emptyCart");
