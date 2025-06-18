@@ -22,3 +22,5 @@ const corsConfig = () => {
     optionsSuccessStatus: 204,
   });
 };
+
+export default corsConfig;

@@ -3,12 +3,14 @@ import dotenv from "dotenv";
 dotenv.config();
 import connectDb from "./configs/dbConnection";
 connectDb();
+import corsConfig from "./configs/cors.config";
 import userRoute from "./routes/userRoutes";
 import quoteRouter from "./routes/quote.router";
 import errorHandler from "./middlewares/errors/errorHandlerMiddleware";
 const app = express();
 const port = process?.env?.PORT ? process?.env?.PORT : 5000;
 
+app.use(corsConfig());
 app.use(express.json());
 
 app.get("/", (_req, res) => {

@@ -22,12 +22,17 @@ https://github.com/ayushnighoskar/FoodDeliveryApp
 Node validation:-
 https://www.youtube.com/watch?v=QR-oi1PCaZk
 
-Question:-
+------------------------Question:-----------------
 https://www.geeksforgeeks.org/node-interview-questions-and-answers/
 What is REPL in NodeJS?
 What do you mean by event loop in NodeJS?
 What is control flow in NodeJS? 24. What is event-driven programming in NodeJS? 25. What is a buffer in NodeJS? 26. What are streams in NodeJS?
 Transform Streams: 27. Explain the crypto module in NodeJS. 28. What is callback hell? 29. Explain the use of the timers module in NodeJS. 30. Difference between setImmediate() and process.nextTick() methods 44. What is a cluster in NodeJS? 60. What is an Event Emitter in Node.js?
+what is option/ferflight in context of rest api
+https://www.youtube.com/watch?v=tcLW5d0KAYE
+what is assyncHandler or high-order-function
+https://www.youtube.com/watch?v=wiOvFcvL6vQ
+------------------------Question:-----------------
 
 https://www.youtube.com/watch?v=_f7h6xQXiLA&list=LL&index=4&t=1126s
 section 1
@@ -59,3 +64,7 @@ how event loop works
                 transform ->
 
         Cors  this is use to configure cross origin  45:00
+        MiddleWare/errorHandler/assyncHandler or high-order-function functionality 1:00 Hr
+        express-rate-limit this is use to restrict user to trigger api multiple time 1:23 Hr
+        API vertioning
+
