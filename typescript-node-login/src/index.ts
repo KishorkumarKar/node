@@ -7,6 +7,7 @@ import corsConfig from "./configs/cors.config";
 import userRoute from "./routes/userRoutes";
 import quoteRouter from "./routes/quote.router";
 import errorHandler from "./middlewares/errors/errorHandlerMiddleware";
+import { urlVersioning } from "./middlewares/apiVersioning";
 const app = express();
 const port = process?.env?.PORT ? process?.env?.PORT : 5000;
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.get("/", (_req, res) => {
   res.send("Hello from TypeScript + Node.js!.......**");
 });
+app.use(urlVersioning("api")); // this to validate API version at this moment API starting with `api`
 app.use("/api/users", userRoute);
 app.use("/api/quote", quoteRouter);
 app.use(errorHandler);

@@ -8,7 +8,11 @@ import { createBasicRateLimiting } from "../middlewares/rateLimiting.middleware"
 const router = express.Router();
 router.post(
   "/login",
-  createBasicRateLimiting({ limit: 15, time: 30 * 1000 }),
+  createBasicRateLimiting({
+    limit: 15,
+    time: 30 * 1000,
+    message: "U have excide the login limit try after some time",
+  }),
   userLoginValidation,
   loginUser,
 );
