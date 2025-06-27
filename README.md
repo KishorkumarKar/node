@@ -32,6 +32,8 @@ what is option/ferflight in context of rest api
 https://www.youtube.com/watch?v=tcLW5d0KAYE
 what is assyncHandler or high-order-function
 https://www.youtube.com/watch?v=wiOvFcvL6vQ
+What is reader board or priority queue
+
 ------------------------Question:-----------------
 
 https://www.youtube.com/watch?v=_f7h6xQXiLA&list=LL&index=4&t=1126s
@@ -66,5 +68,49 @@ how event loop works
         Cors  this is use to configure cross origin  45:00
         MiddleWare/errorHandler/assyncHandler or high-order-function functionality 1:00 Hr
         express-rate-limit this is use to restrict user to trigger api multiple time 1:23 Hr
-        API vertioning
+        API versioning how api versioning is done 1:21
+        to print all request log track 1:33:28
+        error handling 1:36
+        radish cache it's a remote dictionary server it's a in-memory(it's store data in memory) database 1:40
+            read/write operation
+            persistence it will set data for a duration
+            it support multiple datastructure
+            it also help us on pub/sub it enable real time communication between client
+            cashing/session management
+            realtime analytic
 
+            Datastructure 1:59
+
+            LIST ->         2.04.07
+                LPUSH (it push at the beginning of the list ) RPUSH (it push at the end of the list)
+                LRange retrive element form the specific range
+                LPOP it will remove and retrieve first element of the list from left side
+                RPOP it will remove and retrieve last element of the list from right side
+
+            SETS -> 2:10:25
+                SADD this will all one or more member to a set
+                SMEMBERS -> It will return all the element of a set
+                SISMember -> To check particular member exist in a set
+                SREM -> remove one or more item from the set
+                sorted sets -> is sorted-set each element has a score associated to it it is use on reader board or priority queue
+                    ZADD -> add element with score
+                    ZRANGE -> retrive renge of element
+                    ZRANK -> this will give rank of element or position sorted set
+                    ZREM -> remove one or more element
+
+            Hashes 2:22:48
+                HSET to set the value  this is like map.set map.value
+                HGET to get the value
+                HGETALL to get all the value
+                HDELETE to delete
+
+            Pub/Sub 2:27
+                publisher -> send -> chanel -> subscriber will consume that
+                    Publisher will send message to chanel and subscriber will consume that.
+
+            Pipelining and transaction 2:36:53
+                Pipelining is the process of sending multiple commend in a batch
+                transaction is a process in which multiple command are executed as a single unit
+
+
+        Microservice 2:58
