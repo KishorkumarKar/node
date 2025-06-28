@@ -13,9 +13,13 @@ const userSchema = {
     }),
   }),
   registerUser: Joi.object({
-    name: Joi.string().required().messages({
-      "string.empty": "Email is required",
-      "string.any": "Email not provider",
+    first_name: Joi.string().required().messages({
+      "string.empty": "First Name is required",
+      "string.any": "First Name not provider",
+    }),
+    last_name: Joi.string().required().messages({
+      "string.empty": "Last Name is required",
+      "string.any": "Last Name not provider",
     }),
     email: Joi.string().email().required().messages({
       "string.email": "Please enter valid Email",
