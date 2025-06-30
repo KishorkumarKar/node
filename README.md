@@ -33,6 +33,7 @@ https://www.youtube.com/watch?v=tcLW5d0KAYE
 what is assyncHandler or high-order-function
 https://www.youtube.com/watch?v=wiOvFcvL6vQ
 What is reader board or priority queue
+what is high-order-function functionality
 
 ------------------------Question:-----------------
 
@@ -114,3 +115,17 @@ how event loop works
 
 
         Microservice 2:58
+            Identity Service
+                server.js file on identity-service 3:55
+                print log for request response 3:58
+                rate Limit (rate-limiter-flexible)  3:59
+                    RedisClint
+                    DDOS protection and rate limit :4:01:51
+
+                Express-rate-limit 4:06:03
+                unhandledRejection 4:14:12
+            API gateway 4:20
+                env file creation
+                server.js file 4:24:44
+                proxy service work 4:29
+                    setup proxy for authentication route 4:36:13
