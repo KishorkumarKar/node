@@ -24,16 +24,20 @@ https://www.youtube.com/watch?v=QR-oi1PCaZk
 
 ------------------------Question:-----------------
 https://www.geeksforgeeks.org/node-interview-questions-and-answers/
-What is REPL in NodeJS?
-What do you mean by event loop in NodeJS?
-What is control flow in NodeJS? 24. What is event-driven programming in NodeJS? 25. What is a buffer in NodeJS? 26. What are streams in NodeJS?
-Transform Streams: 27. Explain the crypto module in NodeJS. 28. What is callback hell? 29. Explain the use of the timers module in NodeJS. 30. Difference between setImmediate() and process.nextTick() methods 44. What is a cluster in NodeJS? 60. What is an Event Emitter in Node.js?
-what is option/ferflight in context of rest api
-https://www.youtube.com/watch?v=tcLW5d0KAYE
-what is assyncHandler or high-order-function
-https://www.youtube.com/watch?v=wiOvFcvL6vQ
-What is reader board or priority queue
-what is high-order-function functionality
+
+> > What is REPL in NodeJS?
+> > What is REPL in NodeJS?
+> > What do you mean by event loop in NodeJS?
+> > What is control flow in NodeJS? 24. What is event-driven programming in NodeJS? 25. What is a buffer in NodeJS? 26. What are streams in NodeJS?
+> > Transform Streams: 27. Explain the crypto module in NodeJS. 28. What is callback hell? 29. Explain the use of the timers module in NodeJS. 30. Difference between setImmediate() and process.nextTick() methods 44. What is a cluster in NodeJS? 60. What is an Event Emitter in Node.js?
+> > what is option/ferflight in context of rest api
+> > https://www.youtube.com/watch?v=tcLW5d0KAYE
+> > what is assyncHandler or high-order-function
+> > https://www.youtube.com/watch?v=wiOvFcvL6vQ
+> > What is reader board or priority queue
+> > what is high-order-function functionality
+> > in ENV file all data comes as string if type number is required then it need to convert to number
+> > when node server is created at that time all midleware function is loaded once for that log is no printed to print it every time for that for that you need to return request response file microservices\identity-service\src\middlewares\rateLimit.middleware.js
 
 ------------------------Question:-----------------
 
