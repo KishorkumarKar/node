@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const salt = process.env.ACCESS_TOKEN_SECRET || "AACCAA@";
+const salt = Number(process.env.BCRYPT_SALT) || 10;
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -28,7 +28,7 @@ const userSchema = mongoose.Schema(
   },
 );
 
-userSchema.pre("save", async (next) => {
+userSchema.pre("save", async function (next) {
   try {
     if (this.isModified("password")) {
       const hash = await bcrypt.hashSync(this.password, salt);
@@ -40,7 +40,7 @@ userSchema.pre("save", async (next) => {
   }
 });
 
-userSchema.methods.comparePassword = async (candidatePassword) => {
+userSchema.methods.comparePassword = async function (candidatePassword) {
   try {
     return await bcrypt.compare(candidatePassword, this.password);
   } catch (error) {
@@ -49,5 +49,5 @@ userSchema.methods.comparePassword = async (candidatePassword) => {
 };
 
 userSchema.index({ name: "text" }); // for indexing
-
-model.exports = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+module.exports = User;
