@@ -2,6 +2,8 @@ const express = require("express");
 const env = require("dotenv");
 const proxy = require("express-http-proxy");
 env.config();
+const logger = require("./utils/logger.utils");
+const errorHandler = require("./middleware/errorHandler.middleware");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -14,10 +16,12 @@ const proxyOptions = {
     return req.originalUrl.replace(/^\/v1/, "/api");
   },
   proxyErrorHandler: function (err, res, next) {
-    console.log("------", err.message);
-    res
-      .status(400)
-      .json({ message: `Internal server error`, error: err.message });
+    // logger.error("proxyErrorHandler:- " + err.message); // this will not print the stack
+    logger.error(`proxyErrorHandler:- ${err}`); // to print the stack
+    res.status(400).json({
+      message: err.message || `Internal server error`,
+      success: false,
+    });
   },
 };
 
@@ -30,13 +34,15 @@ app.use(
       return proxyReqOpts;
     },
     userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
-      console.log(
+      logger.info(
         `Response received from Identity service: ${proxyRes.statusCode}`,
       );
       return proxyResData;
     },
   }),
 );
+
+app.use(errorHandler);
 
 app.get("/", (req, res) => res.send("Hello API-Gateway!"));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
