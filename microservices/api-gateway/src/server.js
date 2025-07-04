@@ -42,7 +42,6 @@ app.use(
   }),
 );
 
-app.use(errorHandler);
-
 app.get("/", (req, res) => res.send("Hello API-Gateway!"));
+app.use(errorHandler);
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
