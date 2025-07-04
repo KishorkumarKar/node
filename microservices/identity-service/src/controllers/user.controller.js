@@ -5,7 +5,7 @@ const userSessionManagement = require("../utils/userSessionManagement.util");
 
 /**
  * to create customer
- * type:post /api/users/register
+ * type:POST /api/users/register
  * Registration
  */
 const userRegister = asyncHandler(async (req, res) => {
@@ -43,7 +43,26 @@ const userRegister = asyncHandler(async (req, res) => {
 
 /**
  * login
+ * type:POST /api/users/login
  */
+const customerLogin = asyncHandler(async (req, res) => {
+  const { password, email } = req.body;
+  const user = await User.findOne({ email: email });
+  if (!user) {
+    return res
+      .status(201)
+      .json({ message: "User Doesn't exist", status: false });
+  }
+  const validUser = await user.comparePassword(password);
+  if (!validUser) {
+    return res.status(201).json({ message: "Invalid Password", status: false });
+  }
+  const { accessToken: userAccessToken, refreshToken: userRefToken } =
+    await userSessionManagement(user);
+  return res
+    .status(200)
+    .json({ accessToken: userAccessToken, refreshToken: userRefToken });
+});
 
 /**
  * refresh Token
@@ -55,4 +74,5 @@ const userRegister = asyncHandler(async (req, res) => {
 
 module.exports = {
   userRegister,
+  customerLogin,
 };

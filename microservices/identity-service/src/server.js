@@ -13,7 +13,20 @@ connectDB();
 const port = process.env.PORT || 3000;
 
 app.use(helmet());
-app.use(cors());
+
+const allowedOrigin = "http://127.0.0.1:3000";
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || origin === allowedOrigin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  }),
+);
+
 app.use(rateLimit());
 app.use(customLogger);
 
