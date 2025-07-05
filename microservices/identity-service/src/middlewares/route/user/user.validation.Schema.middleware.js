@@ -17,6 +17,9 @@ const userSchemaValidation = {
     }),
     password: Joi.string().required(),
   }),
+  refreshToken: Joi.object({
+    token: Joi.string().required(),
+  }),
 };
 
 module.exports = userSchemaValidation;
