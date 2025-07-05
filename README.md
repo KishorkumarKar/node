@@ -38,10 +38,16 @@ https://www.geeksforgeeks.org/node-interview-questions-and-answers/
 > > what is high-order-function functionality
 > > in ENV file all data comes as string if type number is required then it need to convert to number
 > > when node server is created at that time all midleware function is loaded once for that log is no printed to print it every time for that for that you need to return request response file microservices\identity-service\src\middlewares\rateLimit.middleware.js
+> > To print the stack of error you need to snd the error microservices\api-gateway\src\server.js -> (logger.error(`proxyErrorHandler:- ${err}`);)
+> > why on some case arrow function doesn't work we have to define function line bind on setTimeout -> chatgpt
+> > Difference between var let and const -> chatgpt
+> > can get direct declared value inside seTimeout we need to bind() or use promise microservices\identity-service\src\controllers\user.controller.js
 
 ------------------------Question:-----------------
 
 https://www.youtube.com/watch?v=_f7h6xQXiLA&list=LL&index=4&t=1126s
+Social media microservice - https://github.com/sangammukherjee/Nodejs-microservices-2025
+Express & Redis - https://github.com/sangammukherjee/NodeJS-Express-Redis-Concepts-2025
 section 1
 how event loop works
 
@@ -133,3 +139,4 @@ how event loop works
                 server.js file 4:24:44
                 proxy service work 4:29
                     setup proxy for authentication route 4:36:13
+            Post-service 5:15
