@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const loginSessionSchema = mongoose.Schema(
+const loginSessionSchema = new mongoose.Schema(
   {
     token: {
       type: String,
