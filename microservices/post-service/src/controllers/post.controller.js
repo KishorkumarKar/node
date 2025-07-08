@@ -16,7 +16,7 @@ const createPost = asyncHandler(async (req, res) => {
     userId,
   });
   const post = await postSchema.save();
-  res.status(200).json(post);
+  return res.status(200).json(post);
 });
 
 module.exports = {

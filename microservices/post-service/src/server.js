@@ -7,6 +7,7 @@ const mongoose = require("./config/mongoose.config");
 mongoose();
 const logger = require("./utils/logger.utils");
 const postRouter = require("./routes/post.router");
+const errorHandler = require("./middlewares/errorHandler.middleware");
 //middle ware
 app.use(express.json());
 app.use(helmet());
@@ -17,6 +18,7 @@ const port = process.env.PORT || 3005;
 
 app.get("/", (req, res) => res.send("Hello POST SERVICE!"));
 app.use("/api/post/", postRouter);
+app.use(errorHandler);
 app.listen(port, () => logger.info(`Example app listening on port ${port}!`));
 
 //unhandled promise rejection
