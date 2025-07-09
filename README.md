@@ -42,6 +42,7 @@ https://www.geeksforgeeks.org/node-interview-questions-and-answers/
 > > why on some case arrow function doesn't work we have to define function line bind on setTimeout -> chatgpt
 > > Difference between var let and const -> chatgpt
 > > can get direct declared value inside seTimeout we need to bind() or use promise microservices\identity-service\src\controllers\user.controller.js
+> > what is singleton connection connection
 
 ------------------------Question:-----------------
 
@@ -140,3 +141,9 @@ how event loop works
                 proxy service work 4:29
                     setup proxy for authentication route 4:36:13
             Post-service 5:15
+                npm i nodemon --save-dev 5:18:40
+                IP base ratelimit for sensitive end points 5:42:12
+                assigning user-id on header 5:46:12
+                getAllPost DeletePost getPost for invalid cache/cache-work 6:03
+                    invalid cache 6:13
+            Media-service 6:38
