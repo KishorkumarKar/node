@@ -1,12 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { createPost } = require("../controllers/post.controller");
+const {
+  createPost,
+  deletePost,
+  getAllPost,
+} = require("../controllers/post.controller");
 const {
   postCreation,
 } = require("../middlewares/validation/post.validation.middleware");
 
 router.post("/create", postCreation, createPost);
-// router.delete('/delete:id');
-// router.get('/all');
+router.delete("/delete/:id", deletePost);
+router.get("/all", getAllPost);
 
 module.exports = router;
