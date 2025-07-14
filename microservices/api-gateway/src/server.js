@@ -62,5 +62,26 @@ app.use(
     },
   }),
 );
+
+// media api proxy
+app.use(
+  "/v1/media",
+  authHandler,
+  proxy(process.env.POST_MEDEA_URL, {
+    ...proxyOptions,
+    proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+      if (!srcReq.headers["content-type"].startsWith("multipart/form-data")) {
+        proxyReqOpts.headers["Content-Type"] = "application/json";
+      }
+      return proxyReqOpts;
+    },
+    userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
+      logger.info(
+        `Response received from Identity service: ${proxyRes.statusCode}`,
+      );
+      return proxyResData;
+    },
+  }),
+);
 app.use(errorHandler);
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

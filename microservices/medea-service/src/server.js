@@ -18,7 +18,7 @@ app.use(express.json());
 const port = process.env.PORT || 3004;
 
 app.use(commonLoggerForRequest);
-app.use("/app/media", media);
+app.use("/api/media", media);
 app.get("/", (req, res) => res.send("media World!"));
 
 app.use(errorHandler);
