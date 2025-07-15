@@ -11,7 +11,7 @@ const uploadFile = asyncHandler(async (req, res) => {
       logger.info(`Cloudinary in file upload ${JSON.stringify(result)}`);
       const mediaObject = new Media({
         public_id,
-        userId: "6845e1386147329d2ba51207",
+        userId: req.headers["x-user-id"],
         url,
         fileName: file.originalname,
       });
