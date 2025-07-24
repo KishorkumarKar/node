@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const { uploadFile } = require("../controllers/media.controller");
+const { uploadFile, mediaList } = require("../controllers/media.controller");
 const logger = require("../utils/logger.utility");
 const router = express.Router();
 const maxSize = 1024 * 1024; // 1 MB;
@@ -46,5 +46,7 @@ router.post(
   },
   uploadFile,
 );
+
+router.get("/list", mediaList);
 
 module.exports = router;
