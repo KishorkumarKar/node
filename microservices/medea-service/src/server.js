@@ -13,6 +13,7 @@ const {
   connectAmqp: connectRabbitMQ,
   consumeMessage,
 } = require("./utils/rabbitMq.util");
+const executeConsumer = require("./consumers/index.consumer");
 const app = express();
 
 //-------------queue--------
@@ -49,7 +50,8 @@ const app = express();
 
 //middle ware
 connectRabbitMQ();
-consumeMessage();
+executeConsumer();
+// consumeMessage();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());

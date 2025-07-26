@@ -12,8 +12,8 @@ const connectAmqp = async function () {
     const connection = await amqp.connect(process.env.RABBIT_MQ_URL);
     connect = await connection.createChannel();
 
-    await connect.assertExchange(exchange, "topic", { durable: false });
-    await connect.assertQueue(queue, { durable: false });
+    // await connect.assertExchange(exchange, "topic", { durable: false });
+    // await connect.assertQueue(queue, { durable: false });
     logger.info(`rabinMQ connected to URl ${process.env.RABBIT_MQ_URL}`);
     return connect;
   } catch (error) {
@@ -26,9 +26,10 @@ const pushData = async function (message) {
   try {
     if (!connect) {
       console.log("+++++++++++++++++++===aaa");
-
       connect = connectAmqp();
     }
+    await connect.assertExchange(exchange, "topic", { durable: false });
+    await connect.assertQueue(queue, { durable: false });
     await connect.bindQueue(queue, exchange, routeKey);
     await connect.publish(
       exchange,
@@ -41,7 +42,7 @@ const pushData = async function (message) {
   }
 };
 
-const consumeMessage = async () => {
+const consumeMessage = async (queue, exchange, routeKey, callBack) => {
   try {
     if (!connect) {
       console.log("+++++++++++++++++++==sss=aaa");
@@ -49,14 +50,10 @@ const consumeMessage = async () => {
     }
     await connect.bindQueue(queue, exchange, routeKey);
     await connect.consume(queue, function (msg) {
-      console.log("======", msg.content.toString());
+      callBack(msg);
+      // console.log("======", msg.content.toString());
       connect.ack(msg);
-      // ch.cancel("myconsumer");
     });
-    // setTimeout(function () {
-    //   ch.close();
-    //   conn.close();
-    // }, 500);
   } catch (error) {
     logger.error(error);
   }
