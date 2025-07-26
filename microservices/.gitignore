@@ -4,3 +4,4 @@ typescript-node
 node_modules
 *.log
 .env
+medea-service/public/
