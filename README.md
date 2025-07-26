@@ -35,7 +35,7 @@ https://www.geeksforgeeks.org/node-interview-questions-and-answers/
 > > what is assyncHandler or high-order-function
 > > https://www.youtube.com/watch?v=wiOvFcvL6vQ
 > > What is reader board or priority queue
-> > what is high-order-function functionality
+> > what is high-order-function functionality like asyncHandler
 > > in ENV file all data comes as string if type number is required then it need to convert to number
 > > when node server is created at that time all midleware function is loaded once for that log is no printed to print it every time for that for that you need to return request response file microservices\identity-service\src\middlewares\rateLimit.middleware.js
 > > To print the stack of error you need to snd the error microservices\api-gateway\src\server.js -> (logger.error(`proxyErrorHandler:- ${err}`);)
@@ -147,3 +147,12 @@ how event loop works
                 getAllPost DeletePost getPost for invalid cache/cache-work 6:03
                     invalid cache 6:13
             Media-service 6:38
+            RabbitMQ 7:17
+            search service 8:05
+
+https://github.com/goldbergyoni/nodebestpractices
+https://github.com/ryanmcdermott/clean-code-javascript
+https://github.com/strapi/strapi CMS
+https://github.com/getify/You-Dont-Know-JS
+https://github.com/SheetJS/sheetjs
+https://github.com/ExpressGateway/express-gateway
