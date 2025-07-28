@@ -1,0 +1,5 @@
+schema
+    postId
+    userId
+    content
+    created at index -1
