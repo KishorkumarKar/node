@@ -18,6 +18,13 @@ const createPost = asyncHandler(async (req, res) => {
     mediaId,
   });
   const post = await postSchema.save();
+  const exchange = process.env.RABBIT_MQ_EXCHANGE_POST_ADD;
+  pushToQue(
+    post.toObject(),
+    process.env.RABBIT_MQ_ROUT_KEY_POST_ADD,
+    "test_" + exchange,
+    exchange,
+  );
   return res.status(200).json(post);
 });
 
@@ -32,18 +39,18 @@ const deletePost = asyncHandler(async (req, res) => {
   if (post) {
     pushToQue(post.toObject(), "delete_post");
 
-    return res.status(201).json({
-      message: "Post deleted " + id,
-      success: true,
-    });
+    // return res.status(201).json({
+    //   message: "Post deleted " + id,
+    //   success: true,
+    // });
 
-    // const deletePost = await Post.findOneAndDelete({ _id: id, userId: userId });
-    // if (deletePost) {
-    //   return res.status(201).json({
-    //     message: "Post deleted " + id,
-    //     success: true,
-    //   });
-    // }
+    const deletePost = await Post.findOneAndDelete({ _id: id, userId: userId });
+    if (deletePost) {
+      return res.status(201).json({
+        message: "Post deleted " + id,
+        success: true,
+      });
+    }
   }
   res.status(401);
   throw new Error(`Invalid Post Id ${id}`);

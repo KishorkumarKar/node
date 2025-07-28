@@ -56,7 +56,7 @@ app.use(
     },
     userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
       logger.info(
-        `Response received from Identity service: ${proxyRes.statusCode}`,
+        `Response received from Post service: ${proxyRes.statusCode}`,
       );
       return proxyResData;
     },
@@ -77,11 +77,30 @@ app.use(
     },
     userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
       logger.info(
-        `Response received from Identity service: ${proxyRes.statusCode}`,
+        `Response received from Media service: ${proxyRes.statusCode}`,
       );
       return proxyResData;
     },
   }),
 );
+
+// serch api proxy
+app.use(
+  "/v1/search",
+  authHandler,
+  proxy(process.env.SEARCH_URL, {
+    ...proxyOptions,
+    proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+      return proxyReqOpts;
+    },
+    userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
+      logger.info(
+        `Response received from Search service: ${proxyRes.statusCode}`,
+      );
+      return proxyResData;
+    },
+  }),
+);
+
 app.use(errorHandler);
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

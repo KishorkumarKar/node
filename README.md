@@ -43,6 +43,7 @@ https://www.geeksforgeeks.org/node-interview-questions-and-answers/
 > > Difference between var let and const -> chatgpt
 > > can get direct declared value inside seTimeout we need to bind() or use promise microservices\identity-service\src\controllers\user.controller.js
 > > what is singleton connection connection
+> > what is nginx reverse proxy
 
 ------------------------Question:-----------------
 
@@ -149,6 +150,11 @@ how event loop works
             Media-service 6:38
             RabbitMQ 7:17
             search service 8:05
+                search delete data if post deleted 8:38
+            Docker work 8:50
+            VPS hosting 9:14
+                Remote - SSH to connect remote ssh with VS code 9:27
+            CI CD deployment process 9:43
 
 https://github.com/goldbergyoni/nodebestpractices
 https://github.com/ryanmcdermott/clean-code-javascript

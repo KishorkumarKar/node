@@ -12,6 +12,9 @@ const connectAmqp = async function () {
     const connection = await amqp.connect(process.env.RABBIT_MQ_URL);
     connect = await connection.createChannel();
 
+    connect.on("error", (err) => {
+      console.error("Channel error:", err);
+    });
     // await connect.assertExchange(exchange, "topic", { durable: false });
     // await connect.assertQueue(queue, { durable: false });
     logger.info(`rabinMQ connected to URl ${process.env.RABBIT_MQ_URL}`);
