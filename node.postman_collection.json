@@ -1,0 +1,797 @@
+{
+  "info": {
+    "_postman_id": "16aff0b9-4856-4d80-b0a6-4cdb171b0b9f",
+    "name": "testtttt",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "19029400"
+  },
+  "item": [
+    {
+      "name": "microservices",
+      "item": [
+        {
+          "name": "customer Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "cart_id",
+                "value": "684de3aa70b46ec6b0889a7e",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\":\"aavdaayopmail.com\",\r\n  \"password\":\"aasddaa\",\r\n  \"name\":\"kishor kar\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:3001/api/users/register",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "3001",
+              "path": ["api", "users", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "\r",
+                  "let jsonData = pm.response.json();\r",
+                  "let token = jsonData;\r",
+                  "let accessToken = token.accessToken;\r",
+                  "let refreshToken\r",
+                  "    = token.refreshToken;\r",
+                  "console.log(token.accessToken)\r",
+                  "if (accessToken) {\r",
+                  "    pm.collectionVariables.set(\"ACCESS_TOKEN\", accessToken);\r",
+                  "    pm.collectionVariables.set(\"REFRESH_TOKEN\", refreshToken);\r",
+                  "\r",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "cart_id",
+                "value": "684de3aa70b46ec6b0889a7e",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\":\"aavdaayop@mail.com\",\r\n  \"password\":\"aasddaa\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:3000/v1/users/login",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "3000",
+              "path": ["v1", "users", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "\r",
+                  "let jsonData = pm.response.json();\r",
+                  "let token = jsonData;\r",
+                  "let accessToken=token.accessToken;\r",
+                  "let refreshToken\r",
+                  "=token.refreshToken;\r",
+                  "console.log(token.accessToken)\r",
+                  "if(accessToken){\r",
+                  "pm.collectionVariables.set(\"ACCESS_TOKEN\", accessToken);\r",
+                  "pm.collectionVariables.set(\"REFRESH_TOKEN\", refreshToken);\r",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "{{REFRESH_TOKEN}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:3000/v1/users/logout",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "3000",
+              "path": ["v1", "users", "logout"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "refreshtoken",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  "let jsonData = pm.response.json();\r",
+                  "let token = jsonData;\r",
+                  "let accessToken=token.accessToken;\r",
+                  "let refreshToken=token.refreshToken;\r",
+                  "if(accessToken){\r",
+                  "pm.collectionVariables.set(\"ACCESS_TOKEN\", accessToken);\r",
+                  "pm.collectionVariables.set(\"REFRESH_TOKEN\", refreshToken);\r",
+                  "\r",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "cart_id",
+                "value": "684de3aa70b46ec6b0889a7e",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"token\":\"{{REFRESH_TOKEN}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:3001/api/users/refreshtoken",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "3001",
+              "path": ["api", "users", "refreshtoken"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "customer Register without proxy",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "cart_id",
+                "value": "684de3aa70b46ec6b0889a7e",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\":\"aavdaayopmail.com\",\r\n  \"password\":\"aasddaa\",\r\n  \"name\":\"kishor kar\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:3001/api/users/register",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "3001",
+              "path": ["api", "users", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "post create",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{ACCESS_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "access_token",
+                "value": "{{ACCESS_TOKEN}}",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"content\":\"Roly Kumar..\",\r\n  \"mediaId\":[\r\n      \"6876b8b6865b3b82326cfd42\",\r\n      \"6876b967050c99f2b55c441d\"\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:3000/v1/post/create",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "3000",
+              "path": ["v1", "post", "create"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "post delete",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{ACCESS_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "access_token",
+                "value": "{{ACCESS_TOKEN}}",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"content\":\"Hi.....\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:3000/v1/post/delete/6886fd5a6e07596102042ce2",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "3000",
+              "path": ["v1", "post", "delete", "6886fd5a6e07596102042ce2"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "post all",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{ACCESS_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "access_token",
+                "value": "{{ACCESS_TOKEN}}",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "pageSize",
+                "value": "10",
+                "type": "text"
+              },
+              {
+                "key": "pageNumber",
+                "value": "1",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"content\":\"Hi.....\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:3000/v1/post/all",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "3000",
+              "path": ["v1", "post", "all"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "mediaUpload",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{ACCESS_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "access_token",
+                "value": "{{ACCESS_TOKEN}}",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "pageSize",
+                "value": "6",
+                "type": "text"
+              },
+              {
+                "key": "pageNumber",
+                "value": "2",
+                "type": "text"
+              },
+              {
+                "warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+                "key": "Content-Type",
+                "value": "multipart/form-data",
+                "type": "text"
+              },
+              {
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "uploaded_image",
+                  "type": "file",
+                  "src": "/C:/Users/Encora/Desktop/april.PNG"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://127.0.0.1:3000/v1/media/upload",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "3000",
+              "path": ["v1", "media", "upload"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "mediaList",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{ACCESS_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "access_token",
+                "value": "{{ACCESS_TOKEN}}",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "pageSize",
+                "value": "6",
+                "type": "text"
+              },
+              {
+                "key": "pageNumber",
+                "value": "2",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data",
+                "type": "text"
+              },
+              {
+                "key": "",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "uploaded_image",
+                  "type": "file",
+                  "src": "/C:/Users/Encora/Desktop/april.PNG"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://127.0.0.1:3000/v1/media/list",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "3000",
+              "path": ["v1", "media", "list"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "serch list",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{ACCESS_TOKEN}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "access_token",
+                "value": "{{ACCESS_TOKEN}}",
+                "type": "text",
+                "disabled": true
+              },
+              {
+                "key": "pageSize",
+                "value": "6",
+                "type": "text"
+              },
+              {
+                "key": "pageNumber",
+                "value": "2",
+                "type": "text"
+              },
+              {
+                "key": "",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"text\": \"Roly Das\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:3000/v1/search/list",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "3000",
+              "path": ["v1", "search", "list"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Schhool",
+      "item": [
+        {
+          "name": "Teacher",
+          "item": [
+            {
+              "name": "list",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://127.0.0.1:3005/V1/teacher/list",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "3005",
+                  "path": ["V1", "teacher", "list"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "delete",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://127.0.0.1:3005/V1/teacher/list",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "3005",
+                  "path": ["V1", "teacher", "list"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "add",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\":\"jon\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:3005/V1/teacher/list",
+                  "protocol": "http",
+                  "host": ["127", "0", "0", "1"],
+                  "port": "3005",
+                  "path": ["V1", "teacher", "list"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "emptyCart",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "cart_id",
+            "value": "684de3aa70b46ec6b0889a7e",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://127.0.0.1:9000/api/quote/emptyCart",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "9000",
+          "path": ["api", "quote", "emptyCart"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "customer Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "cart_id",
+            "value": "684de3aa70b46ec6b0889a7e",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\":\"test246@yopmail.com\",\r\n  \"password\":\"aasddaa\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:9000/api/users/login",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "9000",
+          "path": ["api", "users", "login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "customer Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "cart_id",
+            "value": "684de3aa70b46ec6b0889a7e",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\":\"aavdaayopmail.com\",\r\n  \"password\":\"aasddaa\",\r\n  \"name\":\"kishor kar\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:3001/api/users/register",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "3001",
+          "path": ["api", "users", "register"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get Cart",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "cart_id",
+            "value": "684de5b4072548d732818c72",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://127.0.0.1:9000/api/quote/getCart",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "9000",
+          "path": ["api", "quote", "getCart"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "AddProduct",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "cart_id",
+            "value": "684de5b4072548d732818c72",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"qty\":1,\r\n  \"sku\":\"MD05913176.OBS\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:9000/api/quote/product",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "9000",
+          "path": ["api", "quote", "product"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Product",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "cart_id",
+            "value": "684de5b4072548d732818c72",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://127.0.0.1:9000/api/quote/product/684fb3b2b20b46fd2b35a19e",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "9000",
+          "path": ["api", "quote", "product", "684fb3b2b20b46fd2b35a19e"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "ACCESS_TOKEN",
+      "value": ""
+    },
+    {
+      "key": "REFRESH_TOKEN",
+      "value": ""
+    }
+  ]
+}
