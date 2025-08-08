@@ -1,0 +1,106 @@
+const express = require("express");
+const env = require("dotenv");
+const proxy = require("express-http-proxy");
+env.config();
+const logger = require("./utils/logger.utils");
+const errorHandler = require("./middleware/errorHandler.middleware");
+const authHandler = require("./middleware/auth.middleware");
+const app = express();
+const port = process.env.PORT || 5000;
+
+//middleware
+app.use(express.json());
+//middleware
+
+const proxyOptions = {
+  proxyReqPathResolver: (req) => {
+    return req.originalUrl.replace(/^\/v1/, "/api");
+  },
+  proxyErrorHandler: function (err, res, next) {
+    // logger.error("proxyErrorHandler:- " + err.message); // this will not print the stack
+    logger.error(`proxyErrorHandler:- ${err}`); // to print the stack
+    res.status(400).json({
+      message: err.message || `Internal server error`,
+      success: false,
+    });
+  },
+};
+
+// identity proxy
+app.use(
+  "/v1/users/",
+  proxy(process.env.IDENTITY_SERVICE_URL, {
+    ...proxyOptions,
+    proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+      proxyReqOpts.headers["Content-Type"] = "application/json";
+      return proxyReqOpts;
+    },
+    userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
+      logger.info(
+        `Response received from Identity service: ${proxyRes.statusCode}`,
+      );
+      return proxyResData;
+    },
+  }),
+);
+
+// post api proxy
+app.use(
+  "/v1/post/",
+  authHandler,
+  proxy(process.env.POST_SERVICE_URL, {
+    ...proxyOptions,
+    proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+      proxyReqOpts.headers["Content-Type"] = "application/json";
+      return proxyReqOpts;
+    },
+    userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
+      logger.info(
+        `Response received from Post service: ${proxyRes.statusCode}`,
+      );
+      return proxyResData;
+    },
+  }),
+);
+
+// media api proxy
+app.use(
+  "/v1/media",
+  authHandler,
+  proxy(process.env.POST_MEDEA_URL, {
+    ...proxyOptions,
+    proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+      if (!srcReq.headers["content-type"].startsWith("multipart/form-data")) {
+        proxyReqOpts.headers["Content-Type"] = "application/json";
+      }
+      return proxyReqOpts;
+    },
+    userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
+      logger.info(
+        `Response received from Media service: ${proxyRes.statusCode}`,
+      );
+      return proxyResData;
+    },
+  }),
+);
+
+// serch api proxy
+app.use(
+  "/v1/search",
+  authHandler,
+  proxy(process.env.SEARCH_URL, {
+    ...proxyOptions,
+    proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+      return proxyReqOpts;
+    },
+    userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
+      logger.info(
+        `Response received from Search service: ${proxyRes.statusCode}`,
+      );
+      return proxyResData;
+    },
+  }),
+);
+
+app.use(errorHandler);
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));

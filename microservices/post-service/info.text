@@ -1,0 +1,10 @@
+schema
+    user
+    content
+    created_at
+    mediaIds as [string]
+
+controller
+    createPost
+    deletePost
+    getAllPost
