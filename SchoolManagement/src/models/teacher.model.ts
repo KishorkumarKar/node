@@ -6,6 +6,13 @@ import mongoose, {
 } from "mongoose";
 import { ITeacher } from "../interface/teacher.interface";
 
+// Generic helper type for Mongoose toJSON transform
+type ToJSONTransform<T> = (
+  doc: T,
+  ret: Partial<T> & { _id?: any; id?: any; __v?: number },
+  options: Record<string, any>,
+) => any;
+
 const teacherSchema: Schema<ITeacher & Document> = new mongoose.Schema(
   {
     name: {
@@ -60,6 +67,20 @@ teacherSchema.methods.comparePassword = async function (
     throw error;
   }
 };
+
+teacherSchema.set("toJSON", {
+  transform: ((_doc, returnedObj, option) => {
+    // Make sure not to export password and change default _id to id
+    if (!option.showPassword) {
+      delete returnedObj.password;
+    }
+    returnedObj.id = returnedObj._id;
+    delete returnedObj._id;
+    delete returnedObj.__v;
+
+    return returnedObj;
+  }) as ToJSONTransform<ITeacher & Document>,
+});
 const Teacher = mongoose.model<ITeacher & Document>("Teacher", teacherSchema);
 
 export default Teacher;

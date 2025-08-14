@@ -5,8 +5,12 @@ import {
   getAllTeacher,
   getTeacher,
   updateTeacher,
+  teacherLogin,
 } from "../controllers/teacher.controller";
-import { addTeacherValidation } from "../middlewares/teacher.middleware";
+import {
+  addTeacherValidation,
+  loginTeacherValidation,
+} from "../middlewares/teacher.middleware";
 const router = express.Router();
 
 //----------Same-----------
@@ -28,12 +32,10 @@ router.get("/list", async (req, res) => {
 
 //-----------Same----------
 
-router
-  .route("/:id")
-  .get(getTeacher)
-  .delete(deleteTeacher)
-  .post(addTeacherValidation, addTeacher)
-  .put(updateTeacher);
+router.route("/:id").get(getTeacher).delete(deleteTeacher).put(updateTeacher);
+
+router.route("/").post(addTeacherValidation, addTeacher);
+router.route("/login").post(loginTeacherValidation, teacherLogin);
 
 router.get("/list", getAllTeacher);
 

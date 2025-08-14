@@ -7,4 +7,9 @@ const addOrUpdate = Joi.object({
   class: Joi.array(),
 });
 
-export { addOrUpdate };
+const login = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(3).max(13).required(),
+});
+
+export { addOrUpdate, login };

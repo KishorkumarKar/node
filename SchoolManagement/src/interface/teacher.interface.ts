@@ -5,3 +5,8 @@ export interface ITeacher {
   password: string;
   class?: Array<string>;
 }
+
+export interface ITeacherLogin {
+  email: string;
+  password: string;
+}
