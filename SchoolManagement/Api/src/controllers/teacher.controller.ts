@@ -2,6 +2,8 @@ import expressAsyncHandler from "express-async-handler";
 import { Request, Response } from "express";
 import * as teacherService from "../service/teacher.service";
 import { AppError } from "../util/error.utils";
+import { FlattenMaps, Document } from "mongoose";
+import { getWebToken } from "../util/manage.password.utils";
 
 /**
  * TO add teacher
@@ -25,10 +27,15 @@ const addTeacher = expressAsyncHandler(
 const teacherLogin = expressAsyncHandler(
   async (req: Request, res: Response): Promise<any> => {
     const { password, email } = req.body;
-    if (!(await teacherService.getByEmail(email))) {
+    const teacherObject = await teacherService.getByEmail(email);
+    if (!teacherObject) {
       throw AppError.loginValidation(`Not a valid user ${email}`);
     }
-    return res.status(200).json({ success: true, email: email });
+    if (!(await teacherObject.comparePassword(password))) {
+      throw AppError.loginValidation(`Invalid login password ${email}`);
+    }
+    const token = await getWebToken(teacherObject.toJSON());
+    return res.status(200).json({ success: true, token: token });
   },
 );
 

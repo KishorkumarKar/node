@@ -1,5 +1,5 @@
 export interface ITeacher {
-  id?: number;
+  id?: string;
   name: string;
   email: string;
   password: string;

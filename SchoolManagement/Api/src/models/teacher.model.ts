@@ -5,6 +5,10 @@ import mongoose, {
   CallbackWithoutResultAndOptionalError,
 } from "mongoose";
 import { ITeacher } from "../interface/teacher.interface";
+import {
+  comparePassword as bcryptComparePassword,
+  hashThePassword,
+} from "../util/manage.password.utils";
 
 // Generic helper type for Mongoose toJSON transform
 type ToJSONTransform<T> = (
@@ -13,7 +17,11 @@ type ToJSONTransform<T> = (
   options: Record<string, any>,
 ) => any;
 
-const teacherSchema: Schema<ITeacher & Document> = new mongoose.Schema(
+interface TeacherDocs extends Omit<ITeacher, "id">, mongoose.Document {
+  comparePassword(plainPassword: string): Promise<boolean>;
+}
+
+const teacherSchema: Schema<TeacherDocs> = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -38,31 +46,26 @@ const teacherSchema: Schema<ITeacher & Document> = new mongoose.Schema(
 );
 
 teacherSchema.pre("save", async function (next) {
-  // try {
-  //     if (!this.isModified("password")) return next();
-  //     next()
-  // } catch (error: unknown) {
-  //     if (error instanceof Error) {
-  //         next(error);
-  //     } else {
-  //         next(new Error("Unknown error"));
-  //     }
-  // }
-
-  const teacher = this;
-  if (teacher.isModified("password")) {
-    // teacher.password = await bcrypt.hash(teacher.password, 8);
-    teacher.password = "test.aaaa";
+  try {
+    const teacher = this;
+    if (teacher.isModified("password")) {
+      teacher.password = hashThePassword(teacher.password);
+    }
+    next();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      next(error);
+    } else {
+      next(new Error("Unknown error"));
+    }
   }
-  next();
 });
 
 teacherSchema.methods.comparePassword = async function (
   candidatePassword: string,
 ): Promise<boolean> {
   try {
-    return true;
-    // return await bcrypt.compare(candidatePassword, this.password);
+    return bcryptComparePassword(candidatePassword, this.password);
   } catch (error) {
     throw error;
   }
@@ -79,8 +82,11 @@ teacherSchema.set("toJSON", {
     delete returnedObj.__v;
 
     return returnedObj;
-  }) as ToJSONTransform<ITeacher & Document>,
+  }) as ToJSONTransform<TeacherDocs & Document>,
 });
-const Teacher = mongoose.model<ITeacher & Document>("Teacher", teacherSchema);
+const Teacher = mongoose.model<TeacherDocs & Document>(
+  "Teacher",
+  teacherSchema,
+);
 
 export default Teacher;

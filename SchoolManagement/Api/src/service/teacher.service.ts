@@ -10,7 +10,7 @@ const getAll = async () => {};
 /**
  * To Add Teacher
  */
-const create = async (teacher: ITeacher): Promise<ITeacher> => {
+const create = async (teacher: ITeacher) => {
   let teacherObject = new Teacher(teacher);
   teacherObject = await teacherObject.save();
   return teacherObject.toObject();
@@ -21,7 +21,7 @@ const create = async (teacher: ITeacher): Promise<ITeacher> => {
  * @param id
  * @returns
  */
-const get = async (id: any): Promise<ITeacher> => {
+const get = async (id: string) => {
   let teacherObject = null;
   teacherObject = await Teacher.findById(id);
   if (!teacherObject) {
@@ -31,9 +31,9 @@ const get = async (id: any): Promise<ITeacher> => {
   return teacherObject.toJSON();
 };
 
-const getByEmail = async (email: string): Promise<ITeacher | undefined> => {
+const getByEmail = async (email: string) => {
   let teacherObject = await Teacher.findOne({ email: email });
-  return teacherObject?.toJSON();
+  return teacherObject;
 };
 
 export { getAll, create, get, getByEmail };
