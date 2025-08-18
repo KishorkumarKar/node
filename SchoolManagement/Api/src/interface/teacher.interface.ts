@@ -10,3 +10,7 @@ export interface ITeacherLogin {
   email: string;
   password: string;
 }
+
+export interface ITeacherForgotPassword {
+  email: string;
+}

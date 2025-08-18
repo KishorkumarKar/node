@@ -12,4 +12,8 @@ const login = Joi.object({
   password: Joi.string().min(3).max(13).required(),
 });
 
-export { addOrUpdate, login };
+const forgotPassword = Joi.object({
+  email: Joi.string().email().required(),
+});
+
+export { addOrUpdate, login, forgotPassword };

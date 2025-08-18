@@ -50,6 +50,24 @@ const deleteTeacher = expressAsyncHandler(
 );
 
 /**
+ * forgot password
+ * POST /V1/teacher/forgotpassword
+ */
+const forgotPassword = expressAsyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    const { email } = req.body;
+    teacherService.generateForgetPasswordLink(email);
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message:
+          "If it's a valid Email, mail has been triggered to respective email",
+      });
+  },
+);
+
+/**
  * TO Update teacher
  * PUT /V1/teacher/:id
  */
@@ -88,4 +106,5 @@ export {
   updateTeacher,
   getAllTeacher,
   teacherLogin,
+  forgotPassword,
 };

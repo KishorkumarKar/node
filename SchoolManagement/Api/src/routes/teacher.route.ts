@@ -6,10 +6,12 @@ import {
   getTeacher,
   updateTeacher,
   teacherLogin,
+  forgotPassword,
 } from "../controllers/teacher.controller";
 import {
   addTeacherValidation,
   loginTeacherValidation,
+  forgotPasswordTeacherValidation,
 } from "../middlewares/teacher.middleware";
 const router = express.Router();
 
@@ -32,10 +34,12 @@ router.get("/list", async (req, res) => {
 
 //-----------Same----------
 
-router.route("/:id").get(getTeacher).delete(deleteTeacher).put(updateTeacher);
-
 router.route("/").post(addTeacherValidation, addTeacher);
 router.route("/login").post(loginTeacherValidation, teacherLogin);
+router
+  .route("/forgotpassword")
+  .post(forgotPasswordTeacherValidation, forgotPassword);
+router.route("/:id").get(getTeacher).delete(deleteTeacher).put(updateTeacher);
 
 router.get("/list", getAllTeacher);
 
