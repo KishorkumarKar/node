@@ -110,6 +110,7 @@ let serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 export const apiLink = {
   teacher: {
     login: `${serverUrl}teacher/login`,
+    forgotPassword: `${serverUrl}teacher/forgotpassword`,
     base: `${serverUrl}teacher`,
   },
 };
