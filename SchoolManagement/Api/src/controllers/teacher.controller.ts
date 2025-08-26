@@ -34,7 +34,7 @@ const teacherLogin = expressAsyncHandler(
     if (!(await teacherObject.comparePassword(password))) {
       throw AppError.loginValidation(`Invalid login password ${email}`);
     }
-    const token = await getWebToken(teacherObject.toJSON());
+    const token = await getWebToken(teacherObject.toJSON(), "teacher");
     return res.status(200).json({ success: true, token: token });
   },
 );
@@ -57,13 +57,11 @@ const forgotPassword = expressAsyncHandler(
   async (req: Request, res: Response): Promise<any> => {
     const { email } = req.body;
     teacherService.generateForgetPasswordLink(email);
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message:
-          "If it's a valid Email, mail has been triggered to respective email",
-      });
+    return res.status(200).json({
+      success: true,
+      message:
+        "If it's a valid Email, mail has been triggered to respective email",
+    });
   },
 );
 

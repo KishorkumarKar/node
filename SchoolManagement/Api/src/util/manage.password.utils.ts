@@ -12,13 +12,19 @@ export const comparePassword = (password: string, hash: string): boolean => {
   return bcrypt.compareSync(password, hash);
 };
 
-export const getWebToken = async (user: ITeacher): Promise<string> => {
+export const getWebToken = async (
+  user: ITeacher,
+  role: string,
+): Promise<string> => {
   const data = {
     id: user.id,
     name: user.name,
     email: user.email,
+    role: role,
   };
-
-  console.log("ssss---", config.jwtSecret);
   return jwt.sign(data, config.jwtSecret, { expiresIn: config.jwtExpiryTime });
+};
+
+export const verifyToken = async (token: string) => {
+  return jwt.verify(token, config.jwtSecret);
 };

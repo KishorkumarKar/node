@@ -16,4 +16,8 @@ export class AppError extends Error {
   static loginValidation(message: string) {
     return new AppError(message, 401);
   }
+
+  static forbidden(message: string) {
+    return new AppError(message, 403);
+  }
 }
