@@ -29,6 +29,12 @@ route
     schoolMiddleWare.validateToken,
     schoolMiddleWare.validateRole(["teacher"]),
     schoolController.deleteById,
+  )
+  .put(
+    schoolMiddleWare.validateToken,
+    schoolMiddleWare.validateRole(["teacher"]),
+    schoolMiddleWare.add,
+    schoolController.update,
   );
 
 export default route;

@@ -41,6 +41,21 @@ export const getById = async (id: string) => {
  * @param id
  * @returns
  */
+export const updateSchoolById = async (id: string, school: ISchool) => {
+  const schoolObject = await getById(id);
+  if (schoolObject) {
+    schoolObject.set(school);
+    return await schoolObject.save();
+  } else {
+    throw AppError.notFound(`Requested school doesn't exist`);
+  }
+};
+
+/**
+ * delete school by id
+ * @param id
+ * @returns
+ */
 export const deleteById = async (id: string) => {
   const school = await getById(id);
   if (school) {

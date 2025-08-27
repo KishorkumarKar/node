@@ -81,3 +81,23 @@ export const deleteById = expressAsyncHandler(
     }
   },
 );
+
+/**
+ * to Update School
+ * PUT :- /V1/school/:id
+ */
+export const update = expressAsyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    const id = req.params["id"];
+    const school: ISchool = req.body;
+    const saveData = await schoolService.updateSchoolById(id, school);
+    if (saveData) {
+      return res.status(200).json({
+        success: true,
+        ...saveData.toJSON(),
+      });
+    } else {
+      throw AppError.notFound(`School Doesn't exist`);
+    }
+  },
+);
