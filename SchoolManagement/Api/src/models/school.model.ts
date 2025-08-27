@@ -85,10 +85,12 @@ type ToJSONTransform<T> = (
 schoolSchema.set("toJSON", {
   transform: ((_doc, returnedObj) => {
     returnedObj.id = returnedObj._id;
-    returnedObj.start_time = commonUtil.timeConversion(
-      returnedObj.start_time,
-      12,
-    );
+    if (returnedObj.start_time) {
+      returnedObj.start_time = commonUtil.timeConversion(
+        returnedObj.start_time,
+        12,
+      );
+    }
     delete returnedObj._id;
     delete returnedObj.__v;
     return returnedObj;

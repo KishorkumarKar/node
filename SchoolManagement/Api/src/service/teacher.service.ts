@@ -5,6 +5,7 @@ import { AppError } from "../util/error.utils";
 import { hashThePassword } from "../util/manage.password.utils";
 import logger from "../util/logger.util";
 import { emailSeder } from "./mail.service";
+import schoolEvents from "../events/school.events";
 
 /**
  * To get all teacher
@@ -77,4 +78,15 @@ const generateForgetPasswordLink = async (email: string) => {
     manageToken.save();
   }
 };
+
+schoolEvents.onEvent("schoolDeletedId", (msg) => {
+  console.log("📢 School service heard myEvent ....:", msg);
+});
+schoolEvents.onEvent("schoolDeletedId", (msg) => {
+  console.log("📢 School service heard myEvent ....00:", msg);
+});
+schoolEvents.onEvent("schoolDeletedIdCreated", (msg) => {
+  console.log("📢 School service heard myEvent:", msg);
+});
+
 export { getAll, create, get, getByEmail, generateForgetPasswordLink };

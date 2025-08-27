@@ -1,3 +1,4 @@
+import SchoolEvents from "../events/school.events";
 import { ISchool } from "../interface/school.interface";
 import School from "../models/school.model";
 import { AppError } from "../util/error.utils";
@@ -9,6 +10,11 @@ import { AppError } from "../util/error.utils";
  */
 export const add = async (data: ISchool) => {
   const school = new School(data);
+
+  SchoolEvents.emitEvent("schoolDeletedIdCreated", {
+    id: school.id,
+    name: school.name,
+  });
   return await school.save();
 };
 
@@ -59,7 +65,10 @@ export const updateSchoolById = async (id: string, school: ISchool) => {
 export const deleteById = async (id: string) => {
   const school = await getById(id);
   if (school) {
-    return await School.findByIdAndDelete(id);
+    const schoolDeleted = await School.findByIdAndDelete(id);
+    if (schoolDeleted) {
+      SchoolEvents.emitEvent("schoolDeletedId", id);
+    }
   } else {
     throw AppError.forbidden(`Requested school doesn't exist`);
   }
