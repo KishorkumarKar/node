@@ -1,5 +1,6 @@
 import { ISchool } from "../interface/school.interface";
 import School from "../models/school.model";
+import { AppError } from "../util/error.utils";
 
 /**
  * Add school
@@ -11,6 +12,12 @@ export const add = async (data: ISchool) => {
   return await school.save();
 };
 
+/**
+ * To get ass school with limit
+ * @param limit
+ * @param startFrom
+ * @returns
+ */
 export const list = async (limit: number, startFrom: number) => {
   const schoolObject = await School.find()
     .limit(limit)
@@ -18,4 +25,27 @@ export const list = async (limit: number, startFrom: number) => {
     .sort({ _id: -1 });
   const total = await School.countDocuments();
   return { school: schoolObject, total: total };
+};
+
+/**
+ * to get school details by id
+ * @param id
+ * @returns
+ */
+export const getById = async (id: string) => {
+  return await School.findById(id);
+};
+
+/**
+ * delete school by id
+ * @param id
+ * @returns
+ */
+export const deleteById = async (id: string) => {
+  const school = await getById(id);
+  if (school) {
+    return await School.findByIdAndDelete(id);
+  } else {
+    throw AppError.forbidden(`Requested school doesn't exist`);
+  }
 };

@@ -18,4 +18,17 @@ route
     schoolController.getAll,
   );
 
+route
+  .route("/:id")
+  .get(
+    schoolMiddleWare.validateToken,
+    schoolMiddleWare.validateRole(["teacher"]),
+    schoolController.getById,
+  )
+  .delete(
+    schoolMiddleWare.validateToken,
+    schoolMiddleWare.validateRole(["teacher"]),
+    schoolController.deleteById,
+  );
+
 export default route;
