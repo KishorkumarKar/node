@@ -69,6 +69,7 @@ export const deleteById = async (id: string) => {
     if (schoolDeleted) {
       SchoolEvents.emitEvent("schoolDeletedId", id);
     }
+    return schoolDeleted;
   } else {
     throw AppError.forbidden(`Requested school doesn't exist`);
   }
