@@ -11,6 +11,11 @@ route
     schoolMiddleWare.validateRole(["teacher"]),
     schoolMiddleWare.add,
     schoolController.add,
+  )
+  .get(
+    schoolMiddleWare.validateToken,
+    schoolMiddleWare.validateRole(["teacher"]),
+    schoolController.getAll,
   );
 
 export default route;
