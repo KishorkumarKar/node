@@ -113,6 +113,13 @@ export const apiLink = {
     forgotPassword: `${serverUrl}teacher/forgotpassword`,
     base: `${serverUrl}teacher`,
   },
+  school: {
+    add: `${serverUrl}school`,
+    list: `${serverUrl}school`,
+    getById: `${serverUrl}school/`,
+    delete: `${serverUrl}school/`,
+    update: `${serverUrl}school/`,
+  },
 };
 
 export const isValidNameOrLastname = (input: string) => {

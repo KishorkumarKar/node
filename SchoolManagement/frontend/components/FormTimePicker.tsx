@@ -10,10 +10,7 @@ export default function FromTimePicker({
   const [time, setTime] = useState("09:00"); // default value
   return (
     <div className="relative w-full mb-5 group">
-      <label
-        htmlFor="time"
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >
+      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
         {label}
       </label>
       <div className="relative">

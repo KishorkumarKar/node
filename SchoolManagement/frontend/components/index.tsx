@@ -5,3 +5,5 @@ export { default as TableHeader } from "./TableHeader";
 export { default as FromDatePicker } from "./FromDatePicker";
 export { default as FormTimePicker } from "./FormTimePicker";
 export { default as FormTextField } from "./FormTextField";
+export { default as FormTable } from "./FormTable";
+export { default as PageLoader } from "./PageLoader";

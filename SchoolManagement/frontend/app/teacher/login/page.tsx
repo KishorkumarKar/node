@@ -5,12 +5,15 @@ import Link from "next/link";
 import { ForgotPassword } from "@/components";
 // import { isValidEmailAddressFormat } from "@/app/lib/utils";
 import { useState } from "react";
+import { setLoginToken } from "@/lib/manageCookieLib";
+import { useRouter } from "next/navigation";
 
 export default function TeacherLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [actionType, setActionType] = useState("login");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +29,7 @@ export default function TeacherLogin() {
       setError("invalid Email");
     }
 
-    const response = await fetch(apiLink.teacher.login, {
+    await fetch(apiLink.teacher.login, {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
@@ -37,13 +40,16 @@ export default function TeacherLogin() {
       }),
     })
       .then((res) => {
+        console.log(res.status, "------");
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        if (data.token) {
+          setLoginToken(data.token);
+          router.push("/dashboard");
+        }
+        console.log(data.to);
       });
-
-    // TODO: Call your backend API here
   };
 
   const links = [
