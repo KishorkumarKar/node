@@ -50,7 +50,6 @@ export default function Teacher() {
     },
   ];
   useEffect(() => {
-    console.log("--");
     const header = {
       limit: "10",
       page: "1",
@@ -78,28 +77,55 @@ export default function Teacher() {
       });
   }, []);
 
-  // Log when state changes
-  useEffect(() => {
-    console.log("schoolData updated:", schoolData);
-  }, [schoolData]);
+  const filter = (search: string) => {
+    const header = {
+      limit: "10",
+      page: "1",
+      Authorization: `Bearer ${getLoginToken()}`,
+    };
+    const url = apiLink.school.filter + search;
+    fetch(url, {
+      method: "GET",
+      headers: header,
+    })
+      .then((res) => {
+        if (res.status === 401) {
+          console.log("ssss");
+          router.push("/teacher/login");
+          return;
+        }
+        setLoader(false);
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        console.log(schoolData);
+        if (data.schools) {
+          setSchoolData(data.schools);
+        }
+      });
+  };
 
   return (
     <>
       <Header />
       <Sidebar />
       {loader && <PageLoader />}
-      {schoolData.length <= 0 && (
-        <div className="flex items-center justify-center sm:ml-64  pt-22 w-full bg-blue-300">
-          <p className="mb-8">No data found</p>
-        </div>
-      )}
-
-      {schoolData.length > 0 && (
-        <div className=" pt-16 sm:ml-64 p-6 bg-gray-50 min-h-screen">
-          <TableHeader actionType={actionType} />
+      <div className=" pt-16 sm:ml-64 p-6 bg-gray-50 min-h-screen">
+        <TableHeader
+          actionType={actionType}
+          filterDataEvent={filter}
+          searchText={"School Id or Name"}
+        />
+        {schoolData.length <= 0 && (
+          <div className="flex items-center justify-center pt-22 w-full bg-blue-300">
+            <p className="mb-8">No data found</p>
+          </div>
+        )}
+        {schoolData.length > 0 && (
           <FormTable header={header} tableData={schoolData} />
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }

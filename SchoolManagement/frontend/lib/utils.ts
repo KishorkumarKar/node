@@ -116,6 +116,7 @@ export const apiLink = {
   school: {
     add: `${serverUrl}school`,
     list: `${serverUrl}school`,
+    filter: `${serverUrl}school/filter/`,
     getById: `${serverUrl}school/`,
     delete: `${serverUrl}school/`,
     update: `${serverUrl}school/`,

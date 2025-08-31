@@ -37,4 +37,12 @@ route
     schoolController.update,
   );
 
+route
+  .route("/filter/:search")
+  .get(
+    schoolMiddleWare.validateToken,
+    schoolMiddleWare.validateRole(["teacher"]),
+    schoolController.filter,
+  );
+
 export default route;

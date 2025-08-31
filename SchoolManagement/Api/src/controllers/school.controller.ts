@@ -101,3 +101,28 @@ export const update = expressAsyncHandler(
     }
   },
 );
+
+/**
+ * filter school by name and code
+ * PUT :- /V1/school/filter/:search
+ */
+export const filter = expressAsyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    const search = req.params["search"];
+
+    let { limit, page } = req.headers;
+    let limitNumber: number = parseInt((limit ?? 10) as string, 10);
+    let pageNumber: number = parseInt((page ?? 1) as string, 10);
+    const filterData = await schoolService.filterData(
+      limitNumber,
+      (pageNumber - 1) * limitNumber,
+      search,
+    );
+    res.status(200).json({
+      success: true,
+      page: pageNumber,
+      total: filterData.total,
+      schools: [...filterData.school],
+    });
+  },
+);

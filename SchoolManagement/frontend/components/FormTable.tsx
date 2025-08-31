@@ -33,6 +33,12 @@ const FormTable: React.FC<HeaderProps> = ({ header, tableData }) => {
     }
   };
 
+  const formatColName = (text: string | unknown) => {
+    let colName = String(text);
+    colName = colName.replace("_", " ");
+    return colName;
+  };
+
   return (
     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
       <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -53,7 +59,7 @@ const FormTable: React.FC<HeaderProps> = ({ header, tableData }) => {
           </th>
           {header.map((data, key) => (
             <th key={key} scope="col" className="px-6 py-3">
-              {data.title}
+              {formatColName(data.title)}
             </th>
           ))}
         </tr>
