@@ -10,12 +10,14 @@ type Action = {
 type HeaderProps = {
   actionType: Action[];
   filterDataEvent: (value: string) => void;
+  resetFilter: () => void;
   searchText: string;
 };
 
 const TableHeader: React.FC<HeaderProps> = ({
   actionType,
   filterDataEvent,
+  resetFilter,
   searchText,
 }) => {
   const [enableActionTab, setEnableActionTab] = useState<Boolean>(false);
@@ -26,6 +28,10 @@ const TableHeader: React.FC<HeaderProps> = ({
 
   const submitSearchData = () => {
     filterDataEvent(searchData);
+  };
+  const resetFilterSearch = () => {
+    setSearchData("");
+    resetFilter();
   };
   return (
     <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
@@ -108,7 +114,14 @@ const TableHeader: React.FC<HeaderProps> = ({
             type="submit"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            Submit
+            Search
+          </button>
+          <button
+            onClick={resetFilterSearch}
+            type="submit"
+            className="text-white bg-gray-700 hover:bg-gray-600 focus:ring-4 ml-1 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+          >
+            Reset
           </button>
         </div>
       </div>

@@ -14,7 +14,7 @@ export const add = async (
   const { error } = schoolValidation.add.validate(school);
   if (error) {
     logger.error(error);
-    throw new AppError(error.details[0].message, 401);
+    throw new AppError(error.details[0].message, 400);
   }
   return next();
 };

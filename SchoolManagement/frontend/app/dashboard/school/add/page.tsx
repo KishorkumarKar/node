@@ -1,14 +1,66 @@
 "use client";
 
-import { Header, Sidebar, FormTimePicker, FormTextField } from "@/components";
+import {
+  Header,
+  Sidebar,
+  FormTimePicker,
+  FormTextField,
+  FormError,
+} from "@/components";
+import { getLoginToken } from "@/lib/manageCookieLib";
+import { apiLink, formDataToObject } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Teacher() {
+  const [message, setMessage] = useState<any>({});
+  const router = useRouter();
+  const handleSchoolCreate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setMessage({});
+    const formData = new FormData(e.currentTarget);
+    const data = formDataToObject(formData);
+    const form = e.currentTarget;
+
+    const header = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getLoginToken()}`,
+    };
+    await fetch(apiLink.school.add, {
+      method: "POST", // or 'PUT'
+      headers: header,
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (res.status === 401) {
+          router.push("/teacher/login");
+          return;
+        }
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          res
+            .json()
+            .then((data) =>
+              setMessage({ type: "danger", message: data.message }),
+            )
+            .catch((error) =>
+              setMessage({ type: "danger", message: data.message }),
+            );
+        }
+      })
+      .then((data) => {
+        if (data?.success) {
+          form.reset();
+          setMessage({ type: "success", message: "school Added Successfully" });
+        }
+      });
+  };
+
   return (
     <>
-      <Header />
-      <Sidebar />
       <div className=" pt-16 sm:ml-64 p-6 bg-gray-50 min-h-screen">
-        <form className="max-w-3xl mx-auto p-2">
+        <form onSubmit={handleSchoolCreate} className="max-w-3xl mx-auto p-2">
           <div>
             <h1 className="text-5xl font-extrabold dark:text-white p-6">
               Add
@@ -17,41 +69,11 @@ export default function Teacher() {
               </span>
             </h1>
           </div>
-          <div
-            className="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400"
-            role="alert"
-          >
-            <span className="font-medium">Info alert!</span> Change a few things
-            up and try submitting again.
-          </div>
-          <div
-            className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-            role="alert"
-          >
-            <span className="font-medium">Danger alert!</span> Change a few
-            things up and try submitting again.
-          </div>
-          <div
-            className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-            role="alert"
-          >
-            <span className="font-medium">Success alert!</span> Change a few
-            things up and try submitting again.
-          </div>
-          <div
-            className="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
-            role="alert"
-          >
-            <span className="font-medium">Warning alert!</span> Change a few
-            things up and try submitting again.
-          </div>
-          <div
-            className="p-4 text-sm text-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300"
-            role="alert"
-          >
-            <span className="font-medium">Dark alert!</span> Change a few things
-            up and try submitting again.
-          </div>
+          {message && (
+            <FormError
+              error={{ type: message?.type, text: message?.message }}
+            />
+          )}
 
           <div className="grid gap-6 mb-6 md:grid-cols-2">
             <FormTextField name="name" label="Name" />
@@ -98,6 +120,7 @@ export default function Teacher() {
               <input
                 type="text"
                 id="street"
+                name="address[street]"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
               />
@@ -112,6 +135,7 @@ export default function Teacher() {
               <input
                 type="text"
                 id="city"
+                name="address[city]"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
               />
@@ -126,6 +150,7 @@ export default function Teacher() {
               <input
                 type="text"
                 id="state"
+                name="address[state]"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
               />
@@ -140,6 +165,7 @@ export default function Teacher() {
               <input
                 type="text"
                 id="pincode"
+                name="address[pincode]"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
               />
@@ -154,9 +180,10 @@ export default function Teacher() {
               <input
                 type="tel"
                 id="phone"
+                name="phone"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="123-45-678"
-                pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                // pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                 required
               />
             </div>
@@ -170,6 +197,7 @@ export default function Teacher() {
               <input
                 type="email"
                 id="email"
+                name="email"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
               />

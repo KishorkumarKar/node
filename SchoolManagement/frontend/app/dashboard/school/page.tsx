@@ -1,21 +1,25 @@
 "use client";
 
-import {
-  FormTable,
-  Header,
-  PageLoader,
-  Sidebar,
-  TableHeader,
-} from "@/components";
+import { FormTable, PageLoader, Pagination, TableHeader } from "@/components";
 import { getLoginToken } from "@/lib/manageCookieLib";
 import { apiLink } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+const pagination = {
+  page_size: 10,
+  current_page: 1,
+  total: 0,
+};
 export default function Teacher() {
   const router = useRouter();
   const [schoolData, setSchoolData] = useState<any>([]);
   const [loader, setLoader] = useState<boolean>(true);
+  const [paginationData, setPaginationData] = useState<{
+    current_page: number;
+    total: number;
+    page_size: number;
+  }>(pagination);
   const actionType = [
     {
       title: "Mass Delete",
@@ -50,40 +54,15 @@ export default function Teacher() {
     },
   ];
   useEffect(() => {
-    const header = {
-      limit: "10",
-      page: "1",
-      Authorization: `Bearer ${getLoginToken()}`,
-    };
-    fetch(apiLink.school.list, {
-      method: "GET",
-      headers: header,
-    })
-      .then((res) => {
-        if (res.status === 401) {
-          console.log("ssss");
-          router.push("/teacher/login");
-          return;
-        }
-        setLoader(false);
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-        console.log(schoolData);
-        if (data.schools) {
-          setSchoolData(data.schools);
-        }
-      });
+    getRequest(apiLink.school.list);
   }, []);
 
-  const filter = (search: string) => {
+  const getRequest = (url: string) => {
     const header = {
-      limit: "10",
-      page: "1",
+      limit: paginationData.page_size.toString(),
+      page: paginationData.current_page.toString(),
       Authorization: `Bearer ${getLoginToken()}`,
     };
-    const url = apiLink.school.filter + search;
     fetch(url, {
       method: "GET",
       headers: header,
@@ -99,22 +78,34 @@ export default function Teacher() {
       })
       .then((data) => {
         console.log(data);
-        console.log(schoolData);
+
+        let pageData = { ...paginationData };
+        pageData.current_page = data.page;
+        pageData.total = data.total;
+        setPaginationData(pageData);
         if (data.schools) {
           setSchoolData(data.schools);
         }
       });
   };
 
+  const filter = (search: string) => {
+    const url = apiLink.school.filter + search;
+    getRequest(url);
+  };
+  const reset = () => {
+    const url = apiLink.school.list;
+    getRequest(url);
+  };
+
   return (
     <>
-      <Header />
-      <Sidebar />
       {loader && <PageLoader />}
       <div className=" pt-16 sm:ml-64 p-6 bg-gray-50 min-h-screen">
         <TableHeader
           actionType={actionType}
           filterDataEvent={filter}
+          resetFilter={reset}
           searchText={"School Id or Name"}
         />
         {schoolData.length <= 0 && (
@@ -123,7 +114,10 @@ export default function Teacher() {
           </div>
         )}
         {schoolData.length > 0 && (
-          <FormTable header={header} tableData={schoolData} />
+          <>
+            <FormTable header={header} tableData={schoolData} />
+            <Pagination pagination={paginationData} />
+          </>
         )}
       </div>
     </>

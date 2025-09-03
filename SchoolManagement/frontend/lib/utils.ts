@@ -155,3 +155,19 @@ export const isValidCreditCardCVVOrCVC = (input: string) => {
   const regex = /^[0-9]{3,4}$/;
   return regex.test(input);
 };
+
+export function formDataToObject(formData: FormData) {
+  const obj: Record<string, any> = {};
+  for (const [key, value] of formData.entries()) {
+    const match = key.match(/^(\w+)\[(\w+)\]$/); // e.g. "address[city]"
+    if (match) {
+      const [, parent, child] = match;
+      if (!obj[parent]) obj[parent] = {};
+      obj[parent][child] = value;
+    } else {
+      obj[key] = value;
+    }
+  }
+
+  return obj;
+}

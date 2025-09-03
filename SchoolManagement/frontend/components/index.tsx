@@ -1,3 +1,4 @@
+"use client";
 export { default as ForgotPassword } from "./ForgotPassword";
 export { default as Sidebar } from "./Sidebar";
 export { default as Header } from "./Header";
@@ -7,3 +8,5 @@ export { default as FormTimePicker } from "./FormTimePicker";
 export { default as FormTextField } from "./FormTextField";
 export { default as FormTable } from "./FormTable";
 export { default as PageLoader } from "./PageLoader";
+export { default as FormError } from "./FormError";
+export { default as Pagination } from "./Pagination";
