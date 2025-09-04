@@ -1,6 +1,12 @@
 "use client";
 
-import { FormTable, PageLoader, Pagination, TableHeader } from "@/components";
+import {
+  FormError,
+  FormTable,
+  PageLoader,
+  Pagination,
+  TableHeader,
+} from "@/components";
 import { getLoginToken } from "@/lib/manageCookieLib";
 import { apiLink } from "@/lib/utils";
 import { useRouter } from "next/navigation";
@@ -14,7 +20,9 @@ const pagination = {
 export default function Teacher() {
   const router = useRouter();
   const [schoolData, setSchoolData] = useState<any>([]);
+  const [selectedIds, setSelectedIds] = useState<any>([]);
   const [loader, setLoader] = useState<boolean>(true);
+  const [message, setMessage] = useState<any>({});
   const [paginationData, setPaginationData] = useState<{
     current_page: number;
     total: number;
@@ -58,9 +66,17 @@ export default function Teacher() {
   }, []);
 
   const getRequest = (url: string) => {
+    console.log(paginationData);
+    let page = paginationData.current_page
+      ? paginationData.current_page
+      : pagination.current_page;
+    if (paginationData.current_page === undefined) {
+      setPaginationData(pagination);
+    }
+
     const header = {
       limit: paginationData.page_size.toString(),
-      page: paginationData.current_page.toString(),
+      page: page.toString(),
       Authorization: `Bearer ${getLoginToken()}`,
     };
     fetch(url, {
@@ -97,13 +113,61 @@ export default function Teacher() {
     const url = apiLink.school.list;
     getRequest(url);
   };
+  const actionEvent = (actionType: string) => {
+    console.log({ ids: selectedIds });
+    setMessage({});
+    if (actionType == "massdelete") {
+      const header = {
+        Authorization: `Bearer ${getLoginToken()}`,
+        "Content-Type": `application/json`,
+      };
+      const url = apiLink.school.massDelete;
+      fetch(url, {
+        method: "POST",
+        headers: header,
+        body: JSON.stringify({ ids: selectedIds }),
+      })
+        .then((res) => {
+          if (res.status === 401) {
+            router.push("/teacher/login");
+            return;
+          }
+          setLoader(false);
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data);
+
+          if (data?.deleteCount) {
+            setMessage({
+              type: "success",
+              message: "`${data.deleteCount} data has been deleted`",
+            });
+            getRequest(apiLink.school.list);
+          } else if (!data?.success) {
+            setMessage({ type: "danger", message: data.message });
+          }
+          /* let pageData = { ...paginationData };
+          pageData.current_page = data.page;
+          pageData.total = data.total;
+          setPaginationData(pageData);
+          if (data.schools) {
+            setSchoolData(data.schools);
+          } */
+        });
+    }
+    // const url = apiLink.school.list;
+    // getRequest(url);
+  };
 
   return (
     <>
       {loader && <PageLoader />}
       <div className=" pt-16 sm:ml-64 p-6 bg-gray-50 min-h-screen">
+        {JSON.stringify(selectedIds)}
         <TableHeader
           actionType={actionType}
+          actionEvent={actionEvent}
           filterDataEvent={filter}
           resetFilter={reset}
           searchText={"School Id or Name"}
@@ -115,7 +179,16 @@ export default function Teacher() {
         )}
         {schoolData.length > 0 && (
           <>
-            <FormTable header={header} tableData={schoolData} />
+            {message && (
+              <FormError
+                error={{ type: message.type, text: message.message }}
+              />
+            )}
+            <FormTable
+              header={header}
+              tableData={schoolData}
+              setSelectedIds={setSelectedIds}
+            />
             <Pagination pagination={paginationData} />
           </>
         )}

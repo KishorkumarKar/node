@@ -9,28 +9,45 @@ type header = {
 type HeaderProps = {
   header: header[];
   tableData: any[];
+  setSelectedIds: React.Dispatch<React.SetStateAction<any[]>>;
 };
 
-const FormTable: React.FC<HeaderProps> = ({ header, tableData }) => {
+const FormTable: React.FC<HeaderProps> = ({
+  header,
+  tableData,
+  setSelectedIds,
+}) => {
   const [selectAll, setSelectAll] = useState<string[]>([]);
   const allSelected = selectAll.length === tableData.length ? true : false;
   const checkAllData = () => {
-    if (allSelected) {
-      setSelectAll([]);
-    } else {
-      setSelectAll(tableData.map((data) => data.id));
+    let selectedData = [];
+    // if (allSelected) {
+    //   setSelectAll([]);
+    // } else {
+    //   setSelectAll(tableData.map((data) => data.id));
+    // }
+
+    if (!allSelected) {
+      selectedData = tableData.map((data) => data.id);
     }
+    setSelectAll(selectedData);
+    setSelectedIds(selectedData);
   };
   const toggleCheckbox = (id: string) => {
+    let selectedData = [];
     if (selectAll.includes(id)) {
-      setSelectAll(selectAll.filter((x) => x !== id));
+      selectedData = selectAll.filter((x) => x !== id);
+      // setSelectAll(selectAll.filter((x) => x !== id));
     } else {
-      setSelectAll([...selectAll, id]);
+      selectedData = [...selectAll, id];
+      // setSelectAll([...selectAll, id]);
       /* const getId = [...selectAll];  to avoid mutates
       getId.push(id);
       console.log(id, getId);
       setSelectAll(getId); */
     }
+    setSelectAll(selectedData);
+    setSelectedIds(selectedData);
   };
 
   const formatColName = (text: string | unknown) => {

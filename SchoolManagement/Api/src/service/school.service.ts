@@ -1,7 +1,9 @@
+import mongoose from "mongoose";
 import SchoolEvents from "../events/school.events";
-import { ISchool } from "../interface/school.interface";
+import { IMassDelete, ISchool } from "../interface/school.interface";
 import School from "../models/school.model";
 import { AppError } from "../util/error.utils";
+import logger from "../util/logger.util";
 
 /**
  * Add school
@@ -45,17 +47,19 @@ export const filterData = async (
   startFrom: number,
   filterWith: string,
 ) => {
-  const schoolObject = await School.find({
+  const filter = {
     $or: [
-      { name: { $regex: filterWith } },
-      { school_id: { $regex: filterWith } },
+      { name: { $regex: filterWith, $options: "i" } },
+      { school_id: { $regex: filterWith, $options: "i" } },
     ],
-  })
+  };
+
+  const schoolObject = await School.find(filter)
     .select("-address -class_duration -break_time -break_time_started")
     .limit(limit)
     .skip(startFrom)
     .sort({ _id: -1 });
-  const total = await School.countDocuments();
+  const total = await School.countDocuments(filter);
   return { school: schoolObject, total: total };
 };
 
@@ -97,6 +101,28 @@ export const deleteById = async (id: string) => {
     }
     return schoolDeleted;
   } else {
+    throw AppError.forbidden(`Requested school doesn't exist`);
+  }
+};
+
+/**
+ * delete multiple school with multiple id's
+ * @param ids
+ * @returns
+ */
+export const massDelete = async (ids: string[]) => {
+  const objectIds = ids.map((id) => new mongoose.Types.ObjectId(id));
+  const school = await School.find({ _id: { $in: objectIds } });
+  if (school.length > 0) {
+    const result = await School.deleteMany({ _id: { $in: objectIds } });
+    logger.info(
+      "Mass delete request for school",
+      objectIds,
+      result.deletedCount,
+    );
+    return result.deletedCount;
+  } else {
+    logger.error("Requested school doesn't exist ", objectIds);
     throw AppError.forbidden(`Requested school doesn't exist`);
   }
 };

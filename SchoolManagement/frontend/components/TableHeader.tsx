@@ -10,12 +10,14 @@ type Action = {
 type HeaderProps = {
   actionType: Action[];
   filterDataEvent: (value: string) => void;
+  actionEvent: (value: string) => void;
   resetFilter: () => void;
   searchText: string;
 };
 
 const TableHeader: React.FC<HeaderProps> = ({
   actionType,
+  actionEvent,
   filterDataEvent,
   resetFilter,
   searchText,
@@ -32,6 +34,10 @@ const TableHeader: React.FC<HeaderProps> = ({
   const resetFilterSearch = () => {
     setSearchData("");
     resetFilter();
+  };
+  const onActionClick = (actionType: string) => {
+    actionEvent(actionType);
+    setEnableActionTab(false);
   };
   return (
     <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
@@ -68,6 +74,7 @@ const TableHeader: React.FC<HeaderProps> = ({
           {actionType.map((action, index) => (
             <div className="py-1" key={index}>
               <a
+                onClick={() => onActionClick(action.link)}
                 href="#"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
               >

@@ -17,3 +17,7 @@ export const add = Joi.object({
     pincode: Joi.string().required(),
   },
 });
+
+export const massDelete = Joi.object({
+  ids: Joi.array().items(Joi.string().required()).min(1).required(),
+});

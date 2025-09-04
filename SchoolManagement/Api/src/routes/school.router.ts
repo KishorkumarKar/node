@@ -44,5 +44,13 @@ route
     schoolMiddleWare.validateRole(["teacher"]),
     schoolController.filter,
   );
+route
+  .route("/massdelete/")
+  .post(
+    schoolMiddleWare.validateToken,
+    schoolMiddleWare.validateRole(["teacher"]),
+    schoolMiddleWare.massDelete,
+    schoolController.massDelete,
+  );
 
 export default route;

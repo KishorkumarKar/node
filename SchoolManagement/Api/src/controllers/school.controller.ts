@@ -1,5 +1,5 @@
 import expressAsyncHandler from "express-async-handler";
-import { ISchool } from "../interface/school.interface";
+import { ISchool, IMassDelete } from "../interface/school.interface";
 import * as commonUtil from "../util/common.util";
 import * as schoolService from "../service/school.service";
 import { number } from "joi";
@@ -123,6 +123,21 @@ export const filter = expressAsyncHandler(
       page: pageNumber,
       total: filterData.total,
       schools: [...filterData.school],
+    });
+  },
+);
+
+/**
+ * Mass delete
+ * POST :- /V1/school/massDelete
+ */
+export const massDelete = expressAsyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    const ids: IMassDelete = req.body;
+    const deleteCount = await schoolService.massDelete(ids.ids);
+    res.status(200).json({
+      success: true,
+      deleteCount,
     });
   },
 );

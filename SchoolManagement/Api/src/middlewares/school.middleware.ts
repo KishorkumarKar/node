@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ISchool } from "../interface/school.interface";
+import { ISchool, IMassDelete } from "../interface/school.interface";
 import * as schoolValidation from "../validation/school.validation";
 import logger from "../util/logger.util";
 import { AppError } from "../util/error.utils";
@@ -12,6 +12,19 @@ export const add = async (
 ): Promise<object | void> => {
   const school: ISchool = req.body;
   const { error } = schoolValidation.add.validate(school);
+  if (error) {
+    logger.error(error);
+    throw new AppError(error.details[0].message, 400);
+  }
+  return next();
+};
+export const massDelete = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<object | void> => {
+  const ids: IMassDelete = req.body;
+  const { error } = schoolValidation.massDelete.validate(ids);
   if (error) {
     logger.error(error);
     throw new AppError(error.details[0].message, 400);

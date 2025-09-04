@@ -16,3 +16,7 @@ export interface ISchool {
     pincode: string;
   };
 }
+export interface IMassDelete {
+  // ids: string[]; // this is if we can have empty array,
+  ids: [string, ...string[]]; // this is minimum one string is required ,
+}

@@ -120,6 +120,7 @@ export const apiLink = {
     getById: `${serverUrl}school/`,
     delete: `${serverUrl}school/`,
     update: `${serverUrl}school/`,
+    massDelete: `${serverUrl}school/massDelete`,
   },
 };
 
