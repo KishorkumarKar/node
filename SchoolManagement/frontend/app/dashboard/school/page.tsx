@@ -10,7 +10,7 @@ import {
 import { getLoginToken } from "@/lib/manageCookieLib";
 import { apiLink } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const pagination = {
   page_size: 10,
@@ -23,6 +23,10 @@ export default function Teacher() {
   const [selectedIds, setSelectedIds] = useState<any>([]);
   const [loader, setLoader] = useState<boolean>(true);
   const [message, setMessage] = useState<any>({});
+  const resetSelectItem = useRef<React.Dispatch<
+    React.SetStateAction<string[]>
+  > | null>(null);
+
   const [paginationData, setPaginationData] = useState<{
     current_page: number;
     total: number;
@@ -147,24 +151,25 @@ export default function Teacher() {
           } else if (!data?.success) {
             setMessage({ type: "danger", message: data.message });
           }
-          /* let pageData = { ...paginationData };
-          pageData.current_page = data.page;
-          pageData.total = data.total;
-          setPaginationData(pageData);
-          if (data.schools) {
-            setSchoolData(data.schools);
-          } */
+          setSelectedIds([]);
+          //-------step to update child state-----
+
+          // 1 child owns items: string[].
+          // 2 Child exposes its setter setItems to parent via registerSetter.
+          // 3 Parent stores it in childSetterRef.
+          // 4 On button click, parent calls childSetterRef.current?.([]) → this sets the child’s state to [].
+          // 5 Child re-renders and shows “No items left”.
+          resetSelectItem.current?.([]);
+          //-------step to update child state-----
         });
     }
     // const url = apiLink.school.list;
     // getRequest(url);
   };
-
   return (
     <>
       {loader && <PageLoader />}
       <div className=" pt-16 sm:ml-64 p-6 bg-gray-50 min-h-screen">
-        {JSON.stringify(selectedIds)}
         <TableHeader
           actionType={actionType}
           actionEvent={actionEvent}
@@ -188,6 +193,7 @@ export default function Teacher() {
               header={header}
               tableData={schoolData}
               setSelectedIds={setSelectedIds}
+              registerSetter={(fn) => (resetSelectItem.current = fn)}
             />
             <Pagination pagination={paginationData} />
           </>

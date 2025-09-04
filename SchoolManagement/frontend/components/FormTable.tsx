@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // define type for one action
 type header = {
@@ -10,15 +10,24 @@ type HeaderProps = {
   header: header[];
   tableData: any[];
   setSelectedIds: React.Dispatch<React.SetStateAction<any[]>>;
+  registerSetter: (fn: React.Dispatch<React.SetStateAction<string[]>>) => void;
 };
 
 const FormTable: React.FC<HeaderProps> = ({
   header,
   tableData,
   setSelectedIds,
+  registerSetter,
 }) => {
   const [selectAll, setSelectAll] = useState<string[]>([]);
   const allSelected = selectAll.length === tableData.length ? true : false;
+
+  //to update selected row
+  useEffect(() => {
+    registerSetter(setSelectAll);
+  }, [registerSetter]);
+  //to update selected row
+
   const checkAllData = () => {
     let selectedData = [];
     // if (allSelected) {
