@@ -79,25 +79,59 @@ classes Collection
 "end_time": "Green Valley School",
 "number_of_class": 7,
 "subjects": [
-{ "name": "Math", "teacher_id": "teach_501" },
-{ "name": "English", "teacher_id": "teach_502" }
+{
+"name": "Math",
+"teacher_id": "teach_501"
+},
+{
+"name": "English",
+"teacher_id": "teach_502"
+}
 ],
-"students": ["stu_1001", "stu_1002", "stu_1003"],
-
+"students": [
+"stu_1001",
+"stu_1002",
+"stu_1003"
+],
 "schedule": [
 {
 "day": "Monday",
 "periods": [
-{ "start": "09:00", "end": "09:45", "subject": "Math", "teacher_id": "teach_501" },
-{ "start": "09:50", "end": "10:35", "subject": "English", "teacher_id": "teach_502" },
-{ "start": "10:40", "end": "11:25", "subject": "Science", "teacher_id": "teach_503" }
+{
+"start": "09:00",
+"end": "09:45",
+"subject": "Math",
+"teacher_id": "teach_501"
+},
+{
+"start": "09:50",
+"end": "10:35",
+"subject": "English",
+"teacher_id": "teach_502"
+},
+{
+"start": "10:40",
+"end": "11:25",
+"subject": "Science",
+"teacher_id": "teach_503"
+}
 ]
 },
 {
 "day": "Tuesday",
 "periods": [
-{ "start": "09:00", "end": "09:45", "subject": "History", "teacher_id": "teach_504" },
-{ "start": "09:50", "end": "10:35", "subject": "Math", "teacher_id": "teach_501" }
+{
+"start": "09:00",
+"end": "09:45",
+"subject": "History",
+"teacher_id": "teach_504"
+},
+{
+"start": "09:50",
+"end": "10:35",
+"subject": "Math",
+"teacher_id": "teach_501"
+}
 ]
 }
 ]

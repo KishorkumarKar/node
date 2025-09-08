@@ -46,3 +46,22 @@ export const getEndTime = (
   }
   return ` ${hour}:${totalMinuets % 60}`;
 };
+
+const parseTime = (time: string) => new Date(`1970-01-01T${time}`);
+
+/**
+ * To find start and end time of given data
+ */
+export const getStartAndEndTime = (data: { start: string; end: string }[]) => {
+  const lowest = data.reduce((min, curr) => {
+    return parseTime(curr.start) < parseTime(min.start) ? curr : min;
+  });
+  const highest = data.reduce((hig, curr) => {
+    return parseTime(curr.end) > parseTime(hig.end) ? curr : hig;
+  });
+
+  return {
+    start: lowest,
+    end: highest,
+  };
+};
