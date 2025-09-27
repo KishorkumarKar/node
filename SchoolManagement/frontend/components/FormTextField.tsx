@@ -1,17 +1,26 @@
+import { KeyboardEvent, ChangeEvent } from "react";
+
 export default function FormTextField({
   name,
   label,
   inputType = "input",
   note = "",
+  callBackFunctionOnKeyUp,
+  callBackFunctionOnChange,
 }: {
   name: string;
   label: string;
   inputType?: string;
   note?: string;
+  callBackFunctionOnKeyUp?: (selected: KeyboardEvent<HTMLInputElement>) => void;
+  callBackFunctionOnChange?: (selected: ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
     <div className="relative z-0 w-full mb-5 group">
       <input
+        onKeyUp={(e) => callBackFunctionOnKeyUp?.(e)}
+        // onChange={(e)=>callBackFunctionOnChange?.(e)}
+        onBlur={(e) => callBackFunctionOnChange?.(e)}
         name={name}
         id={name}
         type={inputType}

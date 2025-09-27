@@ -3,6 +3,7 @@ import {
   addTeacher,
   deleteTeacher,
   getAllTeacher,
+  getTeacherByFilter,
   getTeacher,
   updateTeacher,
   teacherLogin,
@@ -39,8 +40,10 @@ router.route("/login").post(loginTeacherValidation, teacherLogin);
 router
   .route("/forgotpassword")
   .post(forgotPasswordTeacherValidation, forgotPassword);
-router.route("/:id").get(getTeacher).delete(deleteTeacher).put(updateTeacher);
 
 router.get("/list", getAllTeacher);
+router.post("/filter", getTeacherByFilter);
+// router.route("/list").get(getAllTeacher);
+router.route("/:id").get(getTeacher).delete(deleteTeacher).put(updateTeacher);
 
 export default router;

@@ -8,7 +8,12 @@ import logger from "../util/logger.util";
  */
 export const add = expressAsyncHandler(async (req, res) => {
   const classRoom = req.body;
+
+  console.log(classRoom);
+
   const classRoomObject = await ClassRoomService.add(classRoom);
+
+  console.log(classRoomObject, classRoom);
   logger.info("Class Room save", classRoomObject);
   res
     .status(200)
@@ -26,11 +31,9 @@ export const list = expressAsyncHandler(async (req, res) => {
   const pageNumber = page ? parseInt(page as string, 10) : 1;
   const startFrom = (pageNumber - 1) * limitNumber;
   const classRoomObject = await ClassRoomService.list(limitNumber, startFrom);
-  res
-    .status(200)
-    .json({
-      success: true,
-      class: classRoomObject.class_room,
-      total: classRoomObject.total,
-    });
+  res.status(200).json({
+    success: true,
+    class: classRoomObject.class_room,
+    total: classRoomObject.total,
+  });
 });

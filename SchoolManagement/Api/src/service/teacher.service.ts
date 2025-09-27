@@ -10,7 +10,33 @@ import schoolEvents from "../events/school.events";
 /**
  * To get all teacher
  */
-const getAll = async () => {};
+const getAll = async (limit: number, startFrom: number) => {
+  const teacher = await Teacher.find()
+    .limit(limit)
+    .skip(startFrom)
+    .sort({ _id: -1 });
+  return teacher;
+};
+
+/**
+ * To get all teacher
+ */
+const filterWithData = async (
+  limit: number,
+  startFrom: number,
+  filterData: {},
+) => {
+  const filter = {
+    $or: Object.entries(filterData).map(([key, value]) => ({
+      [key]: { $regex: value, $options: "i" },
+    })),
+  };
+  const teacher = await Teacher.find(filter)
+    .limit(limit)
+    .skip(startFrom)
+    .sort({ _id: -1 });
+  return teacher;
+};
 
 /**
  * To Add Teacher
@@ -34,6 +60,20 @@ const get = async (id: string) => {
   }
   // return teacherObject.toJSON({ showPassword: true } as any);  // to get password
   return teacherObject.toJSON();
+};
+
+/**
+ * To remove teacher by id
+ * @param id
+ * @returns
+ */
+const remove = async (id: string) => {
+  let teacherObject = null;
+  teacherObject = await get(id);
+  if (!teacherObject) {
+    throw AppError.notFound(`User Id not found ${id}`);
+  }
+  return await Teacher.findByIdAndDelete(id);
 };
 
 const getByEmail = async (email: string) => {
@@ -89,4 +129,12 @@ schoolEvents.onEvent("schoolDeletedIdCreated", (msg) => {
   console.log("📢 School service heard myEvent:", msg);
 });
 
-export { getAll, create, get, getByEmail, generateForgetPasswordLink };
+export {
+  getAll,
+  create,
+  get,
+  getByEmail,
+  generateForgetPasswordLink,
+  remove,
+  filterWithData,
+};

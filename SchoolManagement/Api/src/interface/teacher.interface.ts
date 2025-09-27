@@ -1,8 +1,14 @@
 export interface ITeacher {
   id?: string;
   name: string;
+  teacher_id: string;
+  school_id: string;
+  gender: string;
+  subjects: Array<string>;
   email: string;
+  phone: string;
   password: string;
+  joining_date: Date;
   class?: Array<string>;
 }
 

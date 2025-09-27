@@ -111,7 +111,9 @@ export const apiLink = {
   teacher: {
     login: `${serverUrl}teacher/login`,
     forgotPassword: `${serverUrl}teacher/forgotpassword`,
+    filter: `${serverUrl}teacher/filter`,
     base: `${serverUrl}teacher`,
+    add: `${serverUrl}teacher`,
   },
   school: {
     add: `${serverUrl}school`,
@@ -121,6 +123,10 @@ export const apiLink = {
     delete: `${serverUrl}school/`,
     update: `${serverUrl}school/`,
     massDelete: `${serverUrl}school/massDelete`,
+  },
+  classRoom: {
+    add: `${serverUrl}class`,
+    list: `${serverUrl}class`,
   },
 };
 
@@ -158,7 +164,7 @@ export const isValidCreditCardCVVOrCVC = (input: string) => {
 };
 
 export function formDataToObject(formData: FormData) {
-  const obj: Record<string, any> = {};
+  /* const obj: Record<string, any> = {};
   for (const [key, value] of formData.entries()) {
     const match = key.match(/^(\w+)\[(\w+)\]$/); // e.g. "address[city]"
     if (match) {
@@ -170,5 +176,81 @@ export function formDataToObject(formData: FormData) {
     }
   }
 
-  return obj;
+  return obj; */
+
+  const output: any = {};
+
+  for (const [key, value] of formData.entries()) {
+    const parts = key.split(/\[|\]/).filter(Boolean); // e.g. subject[123][name] -> ["subject","123","name"]
+    let current = output;
+
+    parts.forEach((part, index) => {
+      const isLast = index === parts.length - 1;
+
+      // Case 1: numeric index (like ID inside subject)
+      if (!isNaN(Number(part))) {
+        if (!Array.isArray(current)) {
+          // If parent was not an array → make it one
+          const parentKey = parts[index - 1];
+          if (!current[parentKey]) current[parentKey] = [];
+          current = current[parentKey];
+        } else {
+          current = current;
+        }
+
+        // Find or create object with _id
+        let obj = current.find((item: any) => item._id === part);
+        if (!obj) {
+          obj = { _id: part };
+          current.push(obj);
+        }
+        current = obj;
+      } else {
+        // Case 2: normal key
+        if (isLast) {
+          current[part] = value;
+        } else {
+          if (!current[part]) {
+            // If next part is numeric → make this an array
+            if (!isNaN(Number(parts[index + 1]))) {
+              current[part] = [];
+            } else {
+              current[part] = {};
+            }
+          }
+          current = current[part];
+        }
+      }
+    });
+  }
+
+  // Cleanup helper: remove _id
+  function stripIds(obj: any): any {
+    if (Array.isArray(obj)) return obj.map(stripIds);
+    if (typeof obj === "object" && obj !== null) {
+      const { _id, ...rest } = obj;
+      Object.keys(rest).forEach((k) => (rest[k] = stripIds(rest[k])));
+      return rest;
+    }
+    return obj;
+  }
+
+  return stripIds(output);
 }
+
+export const subject = [
+  { id: "math", text: "Math" },
+  { id: "science", text: "Science" },
+  { id: "history", text: "History" },
+  { id: "drawing", text: "Drawing" },
+  { id: "pT", text: "PT" },
+];
+export const classDays = [
+  { id: "Monday", text: "Monday" },
+  { id: "Tuesday", text: "Tuesday" },
+  { id: "Wednesday", text: "Wednesday" },
+  { id: "Thursday", text: "Thursday" },
+  { id: "Friday", text: "Friday" },
+  { id: "Saturday", text: "Saturday" },
+  { id: "Sunday", text: "Sunday" },
+];

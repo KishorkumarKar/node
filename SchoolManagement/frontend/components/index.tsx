@@ -10,3 +10,6 @@ export { default as FormTable } from "./FormTable";
 export { default as PageLoader } from "./PageLoader";
 export { default as FormError } from "./FormError";
 export { default as Pagination } from "./Pagination";
+export { default as ClassRoomSubject } from "./classRoom/Subject";
+export { default as FormDropDown } from "./FormDropDown";
+export { default as ClassSchedule } from "./classRoom/ClassSchedule";

@@ -1,320 +1,20 @@
 "use client";
-import { Key, useState, useEffect, KeyboardEvent, ChangeEvent } from "react";
-import {
-  Sidebar,
-  Header,
-  FromDatePicker,
-  FormTextField,
-  ClassRoomSubject,
-  ClassSchedule,
-  FormError,
-} from "../../../../components";
-import { formDataToObject, subject, classDays, apiLink } from "@/lib/utils";
-import { getLoginToken } from "@/lib/manageCookieLib";
-import router from "next/router";
-
-const fields = {
-  subject: [
-    {
-      name: "name",
-      label: "Subject Name",
-      delete: false,
-    },
-    {
-      name: "teacher_id",
-      label: "Teacher Id",
-      delete: true,
-    },
-  ],
-};
-
-export default function ClassAdd() {
-  const [formSubject, setFormSubject] = useState<number[]>([]);
-  const [message, setMessage] = useState<{ type: any; message: string } | {}>(
-    {},
-  );
-  const [teachers, setTeachers] = useState<{ id: string; text: string }[]>([]);
-
-  useEffect(() => {
-    setFormSubject([Date.now()]); // safe: only runs on client
-  }, []);
-  const [subjectList, setSubjectList] =
-    useState<{ id: string; text: string }[]>(subject);
-
-  const removeItem = (id: number) => {
-    setFormSubject((prev) => prev.filter((itemId) => itemId !== id));
-  };
-
-  const addMore = (type: keyof typeof fields) => {
-    if (type == "subject") {
-      setFormSubject([...formSubject, Date.now()]);
-    }
-  };
-
-  const getTeachersForSchool = async (schoolId: string) => {
-    setMessage({});
-    const header = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getLoginToken()}`,
-    };
-    let data = { school_id: schoolId };
-    // let data = { school_id: "school_101" };
-    await fetch(apiLink.teacher.filter, {
-      method: "POST",
-      headers: header,
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        if (res.status === 401) {
-          router.push("/teacher/login");
-          return;
-        }
-        if (res.status === 200) {
-          return res.json();
-        } else {
-          res
-            .json()
-            .then((data) =>
-              setMessage({ type: "danger", message: data.message }),
-            )
-            .catch((error) =>
-              setMessage({ type: "danger", message: error.message }),
-            );
-        }
-      })
-      .then((data) => {
-        if (data.teachers.length <= 0) {
-          setMessage({
-            type: "danger",
-            message: "No teacher for this school :- " + schoolId,
-          });
-        } else {
-          setTeachers(data.teachers);
-          console.log(data);
-        }
-      });
-  };
-
-  const handleSchoolCreate = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // setMessage({});
-    const formData = new FormData(e.currentTarget);
-    const data = formDataToObject(formData);
-    const form = e.currentTarget;
-    console.log("--", data);
-    if (data.schedule) {
-      let subject: any = [];
-      let keyExist: any = [];
-      data.schedule.map((schedu: any) => {
-        schedu.periods.map((period: any) => {
-          if (period.subject && !keyExist[period.subject + period.teacher_id]) {
-            subject.push({
-              name: period.subject,
-              teacher_id: period.teacher_id,
-            });
-            keyExist[period.subject + period.teacher_id] =
-              period.subject + period.teacher_id;
-          }
-        });
-
-        // subject[key]={};
-      });
-
-      data.subjects = subject;
-      data["students"] = ["stu_1001"];
-      //-----------add data----------
-
-      const header = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getLoginToken()}`,
-      };
-      await fetch(apiLink.classRoom.add, {
-        method: "POST",
-        headers: header,
-        body: JSON.stringify(data),
-      })
-        .then((res) => {
-          if (res.status === 401) {
-            router.push("/teacher/login");
-            return;
-          }
-          if (res.status === 200) {
-            return res.json();
-          } else {
-            res
-              .json()
-              .then((data) => {
-                setMessage({ type: "danger", message: data.message });
-              })
-              .catch((error) => {
-                setMessage({ type: "danger", message: "Class Not Add" });
-              });
-          }
-        })
-        .then((data) => {
-          if (data.success === false) {
-            setMessage({
-              type: "danger",
-              message: data.message,
-            });
-          } else {
-            console.log("class-", data);
-            form.reset();
-
-            setMessage({
-              type: "success",
-              message: "Class Add ",
-            });
-          }
-        });
-      //-----------add data----------
-    }
-  };
-
-  const getSchoolId = (e: ChangeEvent<HTMLInputElement>) => {
-    const currentTarget = e.currentTarget;
-    setTimeout(() => {
-      getTeachersForSchool(currentTarget.value);
-      console.log(currentTarget.id, currentTarget.value);
-    }, 1);
-  };
-
+import { Sidebar, Header, FromDatePicker } from "../../../../components";
+export default function StudentAdd() {
   return (
     <>
       <Header />
       <Sidebar />
       <div className=" pt-16 sm:ml-64 p-6 bg-gray-50 min-h-screen">
-        {"type" in message && (
-          <FormError error={{ type: message.type, text: message.message }} />
-        )}
-        <form onSubmit={handleSchoolCreate} className="max-w-3xl mx-auto p-2">
+        <form className="max-w-3xl mx-auto p-2">
           <h1 className="text-5xl font-extrabold dark:text-white p-6">
             Add
             <small className="ms-2 font-semibold text-gray-500 dark:text-gray-400">
-              Class
+              Student
             </small>
           </h1>
 
-          <div className="grid gap-6 mb-6 md:grid-cols-2">
-            <FormTextField name="name" label="Classroom Name" />
-            <FormTextField name="class_id" label="Classroom Id" />
-            <FormTextField
-              name="school_id"
-              label="School Id"
-              callBackFunctionOnChange={getSchoolId}
-            />
-            <FormTextField name="class_teacher" label="Class Teacher" />
-            <FormTextField
-              name="number_of_class"
-              label="Maximum Number Of Class"
-              inputType="number"
-            />
-          </div>
-
-          {/* <div>
-            <div className="relative flex py-5 items-center">
-              <div className="flex-grow border-t border-gray-400"></div>
-              <span className="flex-shrink mx-4 text-gray-400">Subjects</span>
-              <div className="flex-grow border-t border-gray-400"></div>
-            </div>
-            <div>
-              {formSubject.map((id: number, key: number) => {
-                return (
-                  <div key={id} id={`subject-${key}`}>
-                    <ClassRoomSubject
-                      remove={removeItem}
-                      id={id}
-                      subjectList={subjectList}
-                      teachers={teachers}
-                    />
-                  </div>
-                );
-              })}
-
-              <button
-                onClick={() => addMore("subject")}
-                type="button"
-                className="w-fit text-white bg-gray-400 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex  items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                <svg
-                  className="w-3.5 h-3.5 me-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 18 21"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 5v14M5 12h14"
-                  />
-                </svg>
-                Add more Class Schedule
-              </button>
-            </div>
-          </div> */}
-
-          <div>
-            <div className="relative flex py-5 items-center">
-              <div className="flex-grow border-t border-gray-400"></div>
-              <span className="flex-shrink mx-4 text-gray-400">
-                Class Schedule
-              </span>
-              <div className="flex-grow border-t border-gray-400"></div>
-            </div>
-
-            <div>
-              {formSubject.map((id: number, key: number) => {
-                return (
-                  <div key={id} id={`subject-${key}`}>
-                    <ClassSchedule
-                      remove={removeItem}
-                      id={id}
-                      subjectList={subjectList}
-                      classDays={classDays}
-                      teachers={teachers}
-                    />
-                  </div>
-                );
-              })}
-
-              <button
-                onClick={() => addMore("subject")}
-                type="button"
-                className="w-fit text-white bg-gray-400 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex  items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                <svg
-                  className="w-3.5 h-3.5 me-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 18 21"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 5v14M5 12h14"
-                  />
-                </svg>
-                Add more subject
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 mt-2 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Submit
-            </button>
-          </div>
-
-          {/* <div className="relative z-0 w-full mb-5 group">
+          <div className="relative z-0 w-full mb-5 group">
             <input
               type="email"
               name="floating_email"
@@ -498,7 +198,13 @@ export default function ClassAdd() {
                 Company (Ex. Google)
               </label>
             </div>
-          </div> */}
+          </div>
+          <button
+            type="submit"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Submit
+          </button>
         </form>
       </div>
     </>

@@ -20,7 +20,7 @@ const periodSchema = new Schema<classRoomInterface.Period>({
   teacher_id: {
     type: String,
     required: true,
-    match: [/^teach_\d+$/, "Invalid teacher_id format"],
+    match: [/^teacher_[a-zA-Z0-9]+$/, "Invalid teacher_id format"],
   },
 });
 
@@ -67,7 +67,7 @@ const classRoomSchema = new Schema<IMClassroomDocument>(
     class_id: {
       type: String,
       required: true,
-      match: [/^class_\d+$/, "Invalid class_id format"],
+      match: [/^class_[a-zA-Z0-9]+$/, "Invalid class_id format"],
     },
     name: { type: String, required: true, trim: true },
     class_teacher: {

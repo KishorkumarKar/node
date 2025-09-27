@@ -45,6 +45,8 @@ const teacherLogin = expressAsyncHandler(
  */
 const deleteTeacher = expressAsyncHandler(
   async (req: Request, res: Response): Promise<any> => {
+    const { id } = req.params;
+    await teacherService.remove(id);
     return res.status(200).json({ success: true, message: "deleteTeacher" });
   },
 );
@@ -89,11 +91,46 @@ const getTeacher = expressAsyncHandler(
 
 /**
  * TO add all teacher
- * GET /V1/teacher/:id
+ * GET /V1/teacher/list
  */
 const getAllTeacher = expressAsyncHandler(
   async (req: Request, res: Response): Promise<any> => {
-    return res.status(200).json({ success: true, message: "getAllTeacher" });
+    console.log("---");
+    const { limit, page } = req.headers;
+    const limitNumber = parseInt((limit ?? 10) as string, 10);
+    const PageNumber = parseInt((page ?? 1) as string, 1);
+    const teacherResponse = await teacherService.getAll(
+      limitNumber,
+      (PageNumber - 1) * limitNumber,
+    );
+    return res.status(200).json({ success: true, teachers: teacherResponse });
+  },
+);
+
+/**
+ * TO add all teacher
+ * GET /V1/teacher/list
+ */
+const getTeacherByFilter = expressAsyncHandler(
+  async (req: Request, res: Response): Promise<any> => {
+    const { limit, page } = req.headers;
+    const limitNumber = parseInt((limit ?? 10) as string, 10);
+    console.log("---", limit, page, req.body);
+    const filterData = req.body;
+
+    const filter = {
+      $or: Object.entries(filterData).map(([key, value]) => ({
+        [key]: { $regex: value, $options: "i" },
+      })),
+    };
+
+    const PageNumber = parseInt((page ?? 1) as string, 1);
+    const teacherResponse = await teacherService.filterWithData(
+      limitNumber,
+      (PageNumber - 1) * limitNumber,
+      filterData,
+    );
+    return res.status(200).json({ success: true, teachers: teacherResponse });
   },
 );
 
@@ -105,4 +142,5 @@ export {
   getAllTeacher,
   teacherLogin,
   forgotPassword,
+  getTeacherByFilter,
 };

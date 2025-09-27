@@ -6,7 +6,6 @@ export default function FromTimePicker({
   name: string;
   label: string;
 }) {
-  console.log(name);
   const [time, setTime] = useState("09:00"); // default value
   return (
     <div className="relative w-full mb-5 group">
@@ -36,8 +35,8 @@ export default function FromTimePicker({
           data-timepicker-format="24h"
           data-timepicker
           className="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          min="09:00"
-          max="18:00"
+          min="06:00"
+          max="22:00"
           value={time}
           onChange={(e) => setTime(e.target.value)}
           required

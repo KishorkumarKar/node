@@ -1,4 +1,4 @@
-import { any, string } from "joi";
+import { any, required, string } from "joi";
 import mongoose, {
   Schema,
   Document,
@@ -27,6 +27,17 @@ const teacherSchema: Schema<TeacherDocs> = new mongoose.Schema(
       type: String,
       required: true,
     },
+    teacher_id: {
+      type: String,
+      required: true,
+      unique: true,
+      match: [/^teacher_\d+$/, "Invalid teacher_{id} format"],
+    },
+    gender: {
+      type: String,
+      required: true,
+      enum: ["M", "F", "T"],
+    },
     email: {
       type: String,
       required: true,
@@ -36,9 +47,20 @@ const teacherSchema: Schema<TeacherDocs> = new mongoose.Schema(
       type: String,
       required: true,
     },
-    class: {
-      type: Array,
+    school_id: {
+      type: String,
+      required: true,
     },
+    phone: {
+      type: String,
+      required: true,
+    },
+    joining_date: {
+      type: Date,
+      required: true,
+    },
+    class: [{ type: String }],
+    subjects: [{ type: String, required: true }],
   },
   {
     timestamps: true,
