@@ -46,6 +46,10 @@ export default function sidebar() {
           title: "Add",
           link: "/class/add",
         },
+        {
+          title: "Import",
+          link: "/class/import",
+        },
       ],
     },
     {
